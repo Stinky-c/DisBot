@@ -1,0 +1,4 @@
+[
+    {"name":"city ","value":"Returns the city using the format\n`https://wttr.in/{city}?T?0?q`","inline":false},
+    {"name":"file","value":"Returns the city in a file using the format\n`https://wttr.in/{city}?format=j1`","inline":false}
+]

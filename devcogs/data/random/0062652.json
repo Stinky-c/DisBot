@@ -1,0 +1,184 @@
+[
+    {
+        "name": "Bday",
+        "url": "/bday/{name}/{from_}",
+        "fields": [
+            {
+                "name": "Name",
+                "field": "name"
+            },
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "Chainsaw",
+        "url": "/chainsaw/{name}/{from_}",
+        "fields": [
+            {
+                "name": "Name",
+                "field": "name"
+            },
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "Cocksplat",
+        "url": "/cocksplat/{name}/{from_}",
+        "fields": [
+            {
+                "name": "Name",
+                "field": "name"
+            },
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "Cup",
+        "url": "/cup/{from_}",
+        "fields": [
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "DoSomething",
+        "url": "/dosomething/:do/:something/{from_}",
+        "fields": [
+            {
+                "name": "Do",
+                "field": "do"
+            },
+            {
+                "name": "Something",
+                "field": "something"
+            },
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "FuckThatShit",
+        "url": "/fts/{name}/{from_}",
+        "fields": [
+            {
+                "name": "Name",
+                "field": "name"
+            },
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "FYYFF",
+        "url": "/fyyff/{from_}",
+        "fields": [
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "King",
+        "url": "/king/{name}/{from_}",
+        "fields": [
+            {
+                "name": "Name",
+                "field": "name"
+            },
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "No",
+        "url": "/no/{from_}",
+        "fields": [
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "Question",
+        "url": "/question/{from_}",
+        "fields": [
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "Rat'sArse",
+        "url": "/ratsarse/{from_}",
+        "fields": [
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "RTFM",
+        "url": "/rtfm/{from_}",
+        "fields": [
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "sake",
+        "url": "/sake/{from_}",
+        "fields": [
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "ShutUp",
+        "url": "/shutup/{name}/{from_}",
+        "fields": [
+            {
+                "name": "Name",
+                "field": "name"
+            },
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    },
+    {
+        "name": "Zero",
+        "url": "/zero/{from_}",
+        "fields": [
+            {
+                "name": "From",
+                "field": "from"
+            }
+        ]
+    }
+]

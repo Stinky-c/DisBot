@@ -1,0 +1,1 @@
+from dotenv import load_dotenv;import os;import json;load_dotenv();print(json.dumps(dict(os.environ),indent=4))
