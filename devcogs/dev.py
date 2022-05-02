@@ -107,6 +107,14 @@ class DevCog(discord.Cog):
             json.dump(bannedmessages,f)
     '''
 
+# TODO fix
+# @fun.command(description="Axolotl as a Service")
+# async def axolotlaas(self,ctx,funfact:discord.Option(str,choices=["funfact"],required=False)):
+#     res = re.get("https://axoltlapi.herokuapp.com/")
+#     print(funfact)
+#     message = f"here is a axolotl :)\nfun fact {res.json()['facts']}" if funfact else "here is a axolotl :)"
+#     await ctx.respond(message)
+#     await ctx.send(res.json()["url"])
 
 
 def setup(bot): 

@@ -31,14 +31,40 @@ class FunCog(discord.Cog):
     async def catsaas(self,ctx):
         res = re.get("https://cataas.com/cat")
         await ctx.respond("here is a cat :)")
-        res.json()
         await ctx.send(file=discord.File(io.BytesIO(res.content),"cat.jpg"))
 
-#cmd: catboy
+# cmd: foxaas
+    @fun.command(description="Foxes as a Service")
+    async def foxaas(self,ctx):
+        res = re.get("https://randomfox.ca/floof/")
+        await ctx.respond("here is a fox :)")
+        await ctx.send(res.json()["image"])
+
+# cmd: duckaas
+    @fun.command(description="Ducks as a Service")
+    async def duckaas(self,ctx):
+        res = re.get("https://random-d.uk/api/v2/random")
+        await ctx.respond("here is a duck :)")
+        await ctx.send(res.json()["url"])
+
+# cmd: axolotlaas
+    @fun.command(description="Axolotl as a Service")
+    async def axolotlaas(self,ctx,):
+        res = re.get("https://axoltlapi.herokuapp.com/")
+        await ctx.respond("here is a axolotl :)")
+        await ctx.send(res.json()["url"])
+
+# cmd: catboy
     @fun.command(description="Returns a catboy")
     async def catboy(self,ctx):
         res = re.get("https://api.catboys.com/img")
         await ctx.respond(res.json()["url"])
+
+# cmd: animefacts
+    @fun.command()
+    async def animefacts(self,ctx):
+        res = re.get("https://animechan.vercel.app/api/random")
+        await ctx.respond(f"{res.json()['character']}: {res.json()['quote']}\n- {res.json()['anime']}")
 
 # cmd: cat link
     @fun.command(description="Cat as a Service; link")
@@ -51,6 +77,8 @@ class FunCog(discord.Cog):
     async def funfact(self,ctx):
         res = re.get("https://api.aakhilv.me/fun/facts")
         await ctx.respond(res.json()[0])
+
+# cmd: color
 
 # cmd: RPS
     @fun.command(description="RPS")

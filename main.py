@@ -38,7 +38,7 @@ for cog in devcogs:
     print(f"devcogs.{cog} loaded ")
 
 disabled = [
-    "fun.py",
+    # "fun.py",
     "weather.py"
 ] 
 for cog in os.listdir("cogs"):
