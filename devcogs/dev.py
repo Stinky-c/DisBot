@@ -21,12 +21,6 @@ class View(discord.ui.View):
 
 
 
-path = f"{os.path.dirname(__file__)}/data/random/{rnd.choice(os.listdir(os.path.dirname(__file__)+'/data/random/'))}"
-with open(path) as f:
-    fuckjs:dict = json.load(f)
-    howfuck:list=[]
-for fucking in fuckjs:
-    howfuck.append(fucking["name"])
 
 class DevCog(discord.Cog):
 
@@ -83,14 +77,7 @@ class DevCog(discord.Cog):
 # cmd: 
 
 
-# cmd: fuck
-    # @dev.command(description="fuck")
-    async def fuck(self,ctx,method:discord.Option(str,choices=howfuck),to:discord.Option(discord.User),):
-        for i in fuckjs:
-            if i["name"] == method:
-                link="https://foaas.com"+urllib.parse.quote(i["url"].format(name=to.name,from_=ctx.user.name))
-                message = f"<@{to.id}>\n{link}"
-                await ctx.respond(message)
+
     '''
     global bannedmessages
     bannedmessages = []

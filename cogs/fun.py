@@ -2,6 +2,17 @@ import discord
 import io
 import requests as re
 import random as rnd
+import os 
+import json
+import urllib
+
+
+path = f"{os.path.dirname(__file__)}/data/random/{rnd.choice(os.listdir(os.path.dirname(__file__)+'/data/random/'))}"
+with open(path) as f:
+    fuckjs:dict = json.load(f)
+    howfuck:list=[]
+for fucking in fuckjs:
+    howfuck.append(fucking["name"])
 
 class FunCog(discord.Cog):
 
@@ -17,6 +28,14 @@ class FunCog(discord.Cog):
         res = re.get("https://api.aakhilv.me/fun/wyr")
         await ctx.respond(res.json()[0])
 
+# cmd: fuck
+    @fun.command(description="fuck")
+    async def fuck(self,ctx,method:discord.Option(str,choices=howfuck),to:discord.Option(discord.User),):
+        for i in fuckjs:
+            if i["name"] == method:
+                link="https://foaas.com"+urllib.parse.quote(i["url"].format(name=to.name,from_=ctx.user.name))
+                message = f"<@{to.id}>\n{link}"
+                await ctx.respond(message)
 
     # https://github.com/public-apis/public-apis#animals
 # cmd: dogsaas
