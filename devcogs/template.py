@@ -1,12 +1,17 @@
-import discord
+import disnake
+from disnake.ext import commands
 
 
-class RenameMeCog(discord.Cog):
+class RenameMeCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    renameMe = discord.SlashCommandGroup("debug","Various debug commands")
+    @commands.slash_command()
+    async def RenameMe(self,inter):
+        # Logging here
+        # called everytime a sub command is called
+        pass
 
 
 def setup(bot): 
