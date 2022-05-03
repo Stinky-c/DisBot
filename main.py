@@ -20,13 +20,17 @@ storage:            771385874688245770
 '''
 
 @bot.event
+async def on_hello(messsage):
+    print("hello world")
+    print(messsage)
+@bot.event
 async def on_ready():
     # bot.add_view(View())
     print(f"{bot.user}; {datetime.now()}")
 
-# @bot.event
-# async def on_message_delete(message):
-    # await message.channel.send(message.content)
+'''@bot.event
+async def on_message(message):
+    if message'''
 
 
 devcogs = [
@@ -38,7 +42,7 @@ for cog in devcogs:
     print(f"devcogs.{cog} loaded ")
 
 disabled = [
-    # "fun.py",
+    "fun.py",
     "weather.py"
 ] 
 for cog in os.listdir("cogs"):
@@ -46,6 +50,5 @@ for cog in os.listdir("cogs"):
         bot.load_extension(f"cogs.{cog.split('.')[0]}",)
         print(f"cogs.{cog.split('.')[0]} loaded ")
 
-
 bot.run(os.environ["DISBOTTOKEN1"])
-# bot.run(os.environ["DISBOTTOKEN3"])
+# bot.run(os.environ["DISBOTTOKEN2"])

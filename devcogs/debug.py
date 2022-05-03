@@ -31,7 +31,15 @@ class DebugCog(discord.Cog):
         await ctx.respond(message)
         print(message)
 
-    @debug.command(description="for bucky only")
+    @debug.command(description="Echo Echo Echo - Bucky only")
+    async def echo(self,ctx,message:discord.Option(str)):
+        if ctx.author.id != int(os.environ["BUCKYID"]):
+            await ctx.respond("You cannot use this command",ephemeral=True)
+            return
+        await ctx.delete()
+        await ctx.channel.send(message)
+
+    @debug.command(description="Sends the server ip - Bucky only")
     async def sendipforserver(self,ctx):
         if ctx.author.id == int(os.environ["BUCKYID"]):
             await ctx.respond(req.get("https://icanhazip.com/").content.decode(),ephemeral=True)
