@@ -1,20 +1,25 @@
-import discord
+import disnake
+from disnake.ext import commands
 import os
 import requests as re 
 import json as js
 import io
 
-class Greetings(discord.Cog):
+class Greetings(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    wttr = discord.SlashCommandGroup("weather","Various weather links")
+    @commands.slash_command()
+    async def wttr(self,inter):
+        # Logging here
+        # called everytime a sub command is called
+        pass
     # ephemeral=True
 
 
 # cmd: City
-    @wttr.command(description="Returns the weather for the city")
+    @wttr.sub_command(description="Returns the weather for the city")
     async def city(self,ctx,city:str,):
         link = f"https://wttr.in/{city}?T?0?q"  
         res = re.get(link)
@@ -22,17 +27,17 @@ class Greetings(discord.Cog):
 
 
 # cmd: file
-    @wttr.command(description="Returns the weather for the city in the json file format. WILL NOT BE HIDDEN")
+    @wttr.sub_command(description="Returns the weather for the city in the json file format. WILL NOT BE HIDDEN")
     async def file(self,ctx,city:str):
         link = f"https://wttr.in/{city}?format=j1"
         res = re.get(link)
         await ctx.respond(f"here is the json to {link}")
-        await ctx.send(file=discord.File(io.BytesIO(res.content),"response.json"))
+        await ctx.send(file=disnake.File(io.BytesIO(res.content),"response.json"))
 
 # cmd: help
-    @wttr.command(description="Returns the weather help message")
+    @wttr.sub_command(description="Returns the weather help message")
     async def help(self,ctx):
-        embed=discord.Embed(title="Help", description="The Weather sub command help ", color=0xff7600)
+        embed=disnake.Embed(title="Help", description="The Weather sub command help ", color=0xff7600)
         with open(f"{os.path.dirname(__file__)}/data/help.json") as f:
             tmp = js.load(f)
             for i in tmp:

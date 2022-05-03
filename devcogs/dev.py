@@ -1,4 +1,5 @@
-import discord
+import disnake
+from disnake.ext import commands
 import requests as req
 import random as rnd
 import json
@@ -6,6 +7,7 @@ import os
 import re
 import urllib
 
+'''
 class View(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None) # timeout of the view must be set to None
@@ -18,17 +20,12 @@ class View(discord.ui.View):
         await interaction.message.edit(og+"1")
         button.label = button.label+"1"
         button.refresh_state(interaction)
+'''
 
 
 
-path = f"{os.path.dirname(__file__)}/data/random/{rnd.choice(os.listdir(os.path.dirname(__file__)+'/data/random/'))}"
-with open(path) as f:
-    fuckjs:dict = json.load(f)
-    howfuck:list=[]
-for fucking in fuckjs:
-    howfuck.append(fucking["name"])
 
-class DevCog(discord.Cog):
+class DevCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -36,7 +33,10 @@ class DevCog(discord.Cog):
 
 
 
-    dev = discord.SlashCommandGroup("dev","Various WIP commands")
+    @commands.slash_command()
+    async def dev(self,inter):
+        # Here you can paste some code, it will run for every invoked sub-command.
+        pass
     '''
 
     message will look like:
@@ -59,61 +59,36 @@ class DevCog(discord.Cog):
     '''
 
 
-    # @dev.command(description="Would you rather game")
+    '''
+    # @dev.sub_command(description="Would you rather game")
     async def wouldyourather(self,ctx):
         res = req.get("https://api.aakhilv.me/fun/wyr")
-        # await ctx.respond(res.json()[0])
+        # await ctx.response.send_message(res.json()[0])
         message = f"{res.json()}\n```\nA: 0\nB: 0```"
-        await ctx.respond(message,view=View())
+        await ctx.response.send_message(message,view=View())
+    '''
 
 
-    # @dev.command(description="url scr")
-    async def urlscan(self,ctx,link:discord.Option(str)):
+    # @dev.sub_command(description="url scr")
+    async def urlscan(self,ctx,link:str):
         if re.match(self.urlreg,link):
             # headers = {'API-Key':'$apikey','Content-Type':'application/json'}
             headers = {'Content-Type':'application/json'}
             data = {"url": link, "visibility": "unlisted"}
             response = req.post('https://urlscan.io/api/v1/scan/',headers=headers, data=json.dumps(data))
             print(response.json())
-            await ctx.respond(link)
+            await ctx.response.send_message(link)
         else:
-            await ctx.respond("bucky is stupid")
+            await ctx.response.send_message("bucky is stupid")
 
-    # async def banmessage(self,ctx,channel:discord.Option(discord.TextChannel)):
-# cmd: 
-
-
-# cmd: fuck
-    # @dev.command(description="fuck")
-    async def fuck(self,ctx,method:discord.Option(str,choices=howfuck),to:discord.Option(discord.User),):
-        for i in fuckjs:
-            if i["name"] == method:
-                link="https://foaas.com"+urllib.parse.quote(i["url"].format(name=to.name,from_=ctx.user.name))
-                message = f"<@{to.id}>\n{link}"
-                await ctx.respond(message)
-    '''
-    global bannedmessages
-    bannedmessages = []
-    @bot.event
-    async def on_message(message):
-        if message.content in bannedmessages:
-            await message.delete()
-    @bot.command()
-    async def banmessage(ctx,content:discord.Option(str),):
-        bannedmessages.append(content)
-        await ctx.respond("message has been banned",ephemeral=True)
-        # with open(f"{os.path.dirname(__file__)}/data/banned.json") as f:
-        with open("G:/projects/disBot/devcogs/data/banned.json","w") as f:
-            json.dump(bannedmessages,f)
-    '''
 
 # TODO fix
-# @fun.command(description="Axolotl as a Service")
-# async def axolotlaas(self,ctx,funfact:discord.Option(str,choices=["funfact"],required=False)):
+# @fun.sub_command(description="Axolotl as a Service")
+# async def axolotlaas(self,ctx,funfact:disnake.Option(str,choices=["funfact"],required=False)):
 #     res = re.get("https://axoltlapi.herokuapp.com/")
 #     print(funfact)
 #     message = f"here is a axolotl :)\nfun fact {res.json()['facts']}" if funfact else "here is a axolotl :)"
-#     await ctx.respond(message)
+#     await ctx.response.send_message(message)
 #     await ctx.send(res.json()["url"])
 
 

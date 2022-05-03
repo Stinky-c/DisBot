@@ -1,32 +1,41 @@
-from datetime import datetime
-import discord
 import os
-import requests as req
-import json
+import disnake
+from disnake.ext import commands
+
+import logging
+# logging.basicConfig(level=logging.INFO)
 from dotenv import load_dotenv
-load_dotenv() # only loads in the same dir
+load_dotenv()
 
-# bot = discord.Bot(debug_guilds=[771385874688245770,],intents=discord.Intents.all())
-bot = discord.Bot(debug_guilds=[771385874688245770,851204839605927946],intents=discord.Intents.all())
-# bot = discord.Bot(debug_guilds=[771385874688245770,851204839605927946])
 
+
+# https://docs.python.org/3/library/logging.html#module-logging
 '''
-Big words that i cant spell
-ephemeral
-description
+import disnake
 
-people i guess:     851204839605927946
-storage:            771385874688245770
+logger = logging.getLogger('disnake')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='disnake.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 '''
+
+
+
+bot = commands.Bot(sync_commands_debug=True)
+# bot = commands.Bot(test_guilds=[771385874688245770,])
+# bot = commands.Bot(test_guilds=[771385874688245770,851204839605927946])
 
 @bot.event
 async def on_ready():
-    # bot.add_view(View())
-    print(f"{bot.user}; {datetime.now()}")
+    print("The bot is ready!")
 
-# @bot.event
-# async def on_message_delete(message):
-    # await message.channel.send(message.content)
+
+
+@bot.slash_command()
+async def ping(inter):
+    print(inter)
+    await inter.response.send_message("hello")
 
 
 devcogs = [
@@ -46,6 +55,4 @@ for cog in os.listdir("cogs"):
         bot.load_extension(f"cogs.{cog.split('.')[0]}",)
         print(f"cogs.{cog.split('.')[0]} loaded ")
 
-
-bot.run(os.environ["DISBOTTOKEN1"])
-# bot.run(os.environ["DISBOTTOKEN3"])
+bot.run(os.environ["DISBOTTOKEN2"])
