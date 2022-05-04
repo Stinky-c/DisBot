@@ -10,21 +10,19 @@ load_dotenv()
 
 
 # https://docs.python.org/3/library/logging.html#module-logging
-'''
 import disnake
 
 logger = logging.getLogger('disnake')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename='disnake.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
-'''
 
 
 
-bot = commands.Bot(sync_commands_debug=True)
+# bot = commands.Bot(sync_commands_debug=True)
 # bot = commands.Bot(test_guilds=[771385874688245770,])
-# bot = commands.Bot(test_guilds=[771385874688245770,851204839605927946])
+bot = commands.InteractionBot(test_guilds=[771385874688245770,851204839605927946],sync_commands_debug=True,)
 
 @bot.event
 async def on_hello(messsage):
@@ -40,9 +38,10 @@ async def on_message(message):
     if message'''
 
 
+
 devcogs = [
     "debug",
-    # "dev"
+    "dev"
 ]
 for cog in devcogs:
     bot.load_extension(f"devcogs.{cog}",)
@@ -58,4 +57,3 @@ for cog in os.listdir("cogs"):
         print(f"cogs.{cog.split('.')[0]} loaded ")
 
 bot.run(os.environ["DISBOTTOKEN1"])
-# bot.run(os.environ["DISBOTTOKEN2"])
