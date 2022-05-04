@@ -34,9 +34,14 @@ class DevCog(commands.Cog):
 
 
     @commands.slash_command()
-    async def dev(self,inter):
-        # Here you can paste some code, it will run for every invoked sub-command.
+    async def dev(self,inter:disnake.CmdInter):
         pass
+
+    @commands.user_command()
+    async def avatar(self,inter:disnake.CmdInter, user:disnake.Member):
+        embed = disnake.Embed(title=str(user))
+        embed.set_image(url=user.display_avatar.url)
+        await inter.response.send_message(embed=embed)
     '''
 
     message will look like:
