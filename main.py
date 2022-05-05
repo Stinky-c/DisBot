@@ -3,30 +3,35 @@ import disnake
 from disnake.ext import commands
 
 import logging
-# logging.basicConfig(level=logging.INFO)
 from dotenv import load_dotenv
 load_dotenv()
 
 
 
 # https://docs.python.org/3/library/logging.html#module-logging
-import disnake
 
 logger = logging.getLogger('disnake')
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler(filename='disnake.log', encoding='utf-8', mode='w')
+handler = logging.FileHandler(filename='disnake.log', encoding='utf-8', mode='w+')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
+loggercmd = logging.getLogger("disnakecommands")
+loggercmd.setLevel(logging.INFO)
+handlercmd = logging.FileHandler(filename='disnakecommands.log', encoding='utf-8', mode='w+')
+handlercmd.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+loggercmd.addHandler(handlercmd)
 
 
-# bot = commands.Bot(sync_commands_debug=True)
+
+loggercmd = logging.getLogger("disnakecommands.main")
+bot = commands.InteractionBot(sync_commands_debug=True)
 # bot = commands.Bot(test_guilds=[771385874688245770,])
-bot = commands.InteractionBot(test_guilds=[771385874688245770,851204839605927946],sync_commands_debug=True,)
+# bot = commands.InteractionBot(test_guilds=[771385874688245770,851204839605927946],sync_commands_debug=True,)
 
 @bot.event
 async def on_ready():
-    print("The bot is ready!")
+    loggercmd.info(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
 
 
 
@@ -43,15 +48,13 @@ devcogs = [
 ]
 for cog in devcogs:
     bot.load_extension(f"devcogs.{cog}",)
-    print(f"devcogs.{cog} loaded ")
 
 disabled = [
-    "fun.py",
-    "weather.py"
+    # "fun.py",
+    # "weather.py"
 ] 
 for cog in os.listdir("cogs"):
-    if not os.path.isdir(f"cogs/{cog}") and cog not in disabled: 
+    if os.path.isfile(f"cogs/{cog}") and cog not in disabled: 
         bot.load_extension(f"cogs.{cog.split('.')[0]}",)
-        print(f"cogs.{cog.split('.')[0]} loaded ")
 
 bot.run(os.environ["DISBOTTOKEN1"])
