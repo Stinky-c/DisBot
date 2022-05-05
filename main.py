@@ -25,7 +25,7 @@ loggercmd.addHandler(handlercmd)
 
 
 loggercmd = logging.getLogger("disnakecommands.main")
-bot = commands.InteractionBot(sync_commands_debug=True)
+bot = commands.InteractionBot(sync_commands_debug=True,owner_id=os.environ["BUCKYID"])
 # bot = commands.Bot(test_guilds=[771385874688245770,])
 # bot = commands.InteractionBot(test_guilds=[771385874688245770,851204839605927946],sync_commands_debug=True,)
 
@@ -58,5 +58,5 @@ disabled = [
 for cog in os.listdir("cogs"):
     if os.path.isfile(f"cogs/{cog}") and cog not in disabled: 
         bot.load_extension(f"cogs.{cog.split('.')[0]}",)
-
+print("running")
 bot.run(os.environ["DISBOTTOKEN1"])

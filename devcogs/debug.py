@@ -16,7 +16,7 @@ class DebugCog(commands.Cog):
         
     @commands.slash_command()
     async def debug(self,inter:disnake.CmdInter):
-        self.loggerl2.info(f"{inter.user.name} ran a command") # sub command logger
+        self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
         pass
     @debug.sub_command(description="test")
     async def test(self,inter:disnake.CmdInter):
