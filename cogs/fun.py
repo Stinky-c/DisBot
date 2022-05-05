@@ -1,9 +1,13 @@
+from bs4 import BeautifulSoup
+from urllib import parse
+import time
 import disnake
 from disnake.ext import commands
 from pytube import YouTube
 import tempfile
 import io
-import requests as re
+import re
+import requests as req
 import random as rnd
 import os 
 import json
@@ -21,12 +25,13 @@ class FunCog(commands.Cog):
 
     def __init__(self, bot):
         self.loggerl2 = logging.getLogger("disnakecommands.fun.cmd")
-
+        self.urlreg = re.compile(r"(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b/?(?!@)))") 
+        self.redditreg = re.compile(r"https://www\.reddit\.com/r/.*")
         self.bot = bot
 
     @commands.slash_command()
     async def fun(self,inter:disnake.CmdInter):
-        self.loggerl2.info(f"{inter.user.name} ran a command") # sub command logger
+        self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
 
         pass
 
@@ -41,18 +46,55 @@ class FunCog(commands.Cog):
                 return
             yt = YouTube(link)
             await inter.response.defer()
-            for vid in yt.streams.order_by("resolution").desc().filter(file_extension="mp4",only_video=True,progressive=False,video_codec="avc1.4d4015"):
-                if vid.filesize <= 8388608:
+            vids = yt.streams.order_by("resolution").desc().filter(type="video",progressive=True,mime_type="video/mp4",)
+            for vid in vids:
+                if vid.filesize_approx <= 8388608:
                     break
-            if vid.filesize >= 8388608:
-                await inter.send("This video cannot be downloaded due to its size. Please try a smaller one")
-                self.loggerl2.error(f"'{yt.title}' is too large ; data: {vid}")
+            if len(vids) == 0:
+                self.loggerl2.info(f"{yt.title} cannot be downloaded due to invaild filters")
+                await inter.send(f"{yt.title} cannot be downloaded due to invaild filters")
                 return
+
+            if vid.filesize_approx >= 8388608:
+                self.loggerl2.info(f"{yt.title} cannot be downloaded due to invaild filters")
+                await inter.send(f"{yt.title} cannot be downloaded due to invaild filters")
+                return
+
             with tempfile.TemporaryDirectory() as td:
-                self.loggerl2.info(f"'{inter.user.name}' downloaded '{yt.title}'; size: {round(vid.filesize/1024,5)}kb, data: '{vid}'")
+                self.loggerl2.info(f"'{inter.user.name}' downloaded '{yt.title}'; size: {round(vid.filesize_approx/1024,5)}kb\ndata: '{vid}'")
                 await inter.send(file=disnake.File(vid.download(td)))
                 return
         except Exception as e:
+            self.loggerl2.error(e)
+            self.loggerl2.error(f"'{yt.title}'; size: {round(vid.filesize_approx/1024,5)}kb\ndata: '{vid}'")
+            await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
+
+# cmd : redditdownload
+# TODO move this command to its own cog and fix it
+    @fun.sub_command()
+    async def redditdownload(self,inter:disnake.CmdInter,link:str):
+        try:
+            if not re.match(self.redditreg,link):
+                await inter.send("Please provide a valid link\n Example:`https://www.reddit.com/r/blurrypicturesofcats/comments/uigcmv/blurry_picture_of_a_cat/` or `https://www.reddit.com/r/blurrypicturesofcats/comments/uigcmv/`")
+                return
+
+            link2 = "https://redditsave.com/info?url="+parse.quote(link)
+            soup = BeautifulSoup(req.get(link2).content, 'html.parser')
+            download = soup.find("div", {"class": "download-info"}).find("a").get("href") if not soup.find("div", {"class": "alert alert-danger"}) else None
+            if download is None:
+                await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
+                return
+            await inter.response.defer()
+            res = req.get(download)
+            if int(res.headers.get("Content-Length")) >= 8388608:
+                await inter.send(f"The file is too large\nHere is the link {download}")
+                return
+            currnettime=str(time.time()).split(".")[0]
+            
+            await inter.send(file=disnake.File(io.BytesIO(res.content),currnettime+".jpg" if res.headers.get("Content-Type") == "image/jpeg" else currnettime+".mp4"))
+            self.loggerl2.info(f"'{inter.user.name}' downloaded a reddit video size: {round(int(res.headers.get('Content-Length'))/1024,5)}kb\nurl: '{download}'")
+        except Exception as e:
+            print(e)
             self.loggerl2.error(e)
             await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
 

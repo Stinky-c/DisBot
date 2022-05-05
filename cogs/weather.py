@@ -14,7 +14,7 @@ class Greetings(commands.Cog):
 
     @commands.slash_command()
     async def wttr(self,inter:disnake.CmdInter):
-        self.loggerl2.info(f"{inter.user.name} ran a command") # sub command logger
+        self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
         pass
     # ephemeral=True
 
