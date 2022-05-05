@@ -1,6 +1,6 @@
 import disnake
 from disnake.ext import commands
-
+import logging
 
 class RenameMeCog(commands.Cog):
 
@@ -9,8 +9,8 @@ class RenameMeCog(commands.Cog):
 
     @commands.slash_command()
     async def RenameMe(self,inter):
-        # Logging here
-        # called everytime a sub command is called
+        self.loggerl2.info(f"{inter.user.name} ran a command") # sub command logger
+
         pass
 
 
