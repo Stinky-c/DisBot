@@ -47,13 +47,14 @@ class FunCog(commands.Cog):
             yt = YouTube(link)
             await inter.response.defer()
             vids = yt.streams.order_by("resolution").desc().filter(type="video",progressive=True,mime_type="video/mp4",)
-            for vid in vids:
-                if vid.filesize_approx <= 8388608:
-                    break
             if len(vids) == 0:
                 self.loggerl2.info(f"{yt.title} cannot be downloaded due to invaild filters")
                 await inter.send(f"{yt.title} cannot be downloaded due to invaild filters")
                 return
+
+            for vid in vids:
+                if vid.filesize_approx <= 8388608:
+                    break
 
             if vid.filesize_approx >= 8388608:
                 self.loggerl2.info(f"{yt.title} cannot be downloaded due to invaild filters")
@@ -66,37 +67,33 @@ class FunCog(commands.Cog):
                 return
         except Exception as e:
             self.loggerl2.error(e)
-            self.loggerl2.error(f"'{yt.title}'; size: {round(vid.filesize_approx/1024,5)}kb\ndata: '{vid}'")
+            self.loggerl2.error(f"downloading '{yt.title}' has errored")
             await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
 
 # cmd : redditdownload
 # TODO move this command to its own cog and fix it
     @fun.sub_command()
     async def redditdownload(self,inter:disnake.CmdInter,link:str):
-        try:
-            if not re.match(self.redditreg,link):
-                await inter.send("Please provide a valid link\n Example:`https://www.reddit.com/r/blurrypicturesofcats/comments/uigcmv/blurry_picture_of_a_cat/` or `https://www.reddit.com/r/blurrypicturesofcats/comments/uigcmv/`")
-                return
+        if not re.match(self.redditreg,link):
+            await inter.send("Please provide a valid link\n Example:`https://www.reddit.com/r/blurrypicturesofcats/comments/uigcmv/blurry_picture_of_a_cat/` or `https://www.reddit.com/r/blurrypicturesofcats/comments/uigcmv/`")
+            return
 
-            link2 = "https://redditsave.com/info?url="+parse.quote(link)
-            soup = BeautifulSoup(req.get(link2).content, 'html.parser')
-            download = soup.find("div", {"class": "download-info"}).find("a").get("href") if not soup.find("div", {"class": "alert alert-danger"}) else None
-            if download is None:
-                await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
-                return
-            await inter.response.defer()
-            res = req.get(download)
-            if int(res.headers.get("Content-Length")) >= 8388608:
-                await inter.send(f"The file is too large\nHere is the link {download}")
-                return
-            currnettime=str(time.time()).split(".")[0]
-            
-            await inter.send(file=disnake.File(io.BytesIO(res.content),currnettime+".jpg" if res.headers.get("Content-Type") == "image/jpeg" else currnettime+".mp4"))
-            self.loggerl2.info(f"'{inter.user.name}' downloaded a reddit video size: {round(int(res.headers.get('Content-Length'))/1024,5)}kb\nurl: '{download}'")
-        except Exception as e:
-            print(e)
-            self.loggerl2.error(e)
+        link2 = "https://redditsave.com/info?url="+parse.quote(link)
+        print(link2)
+        soup = BeautifulSoup(req.get(link2).content, 'html.parser')
+        download = soup.find("div", {"class": "download-info"}).find("a").get("href") if not soup.find("div", {"class": "alert alert-danger"}) else None
+        if download is None:
             await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
+            return
+        await inter.response.defer()
+        res = req.get(download)
+        if int(res.headers.get("Content-Length")) >= 8388608:
+            await inter.send(f"The file is too large\nHere is the link {download}")
+            return
+        currnettime=str(time.time()).split(".")[0]
+        
+        await inter.send(file=disnake.File(io.BytesIO(res.content),currnettime+".jpg" if res.headers.get("Content-Type") == "image/jpeg" else currnettime+".mp4"))
+        self.loggerl2.info(f"'{inter.user.name}' downloaded a reddit video size: {round(int(res.headers.get('Content-Length'))/1024,5)}kb\nurl: '{download}'")
 
 # cmd: would you rather
     @fun.sub_command(description="Would you rather game")
