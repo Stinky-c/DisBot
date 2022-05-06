@@ -98,7 +98,7 @@ class FunCog(commands.Cog):
 # cmd: would you rather
     @fun.sub_command(description="Would you rather game")
     async def wouldyourather(self,inter:disnake.CmdInter):
-        res = re.get("https://api.aakhilv.me/fun/wyr")
+        res = req.get("https://api.aakhilv.me/fun/wyr")
         await inter.send(res.json()[0])
 
 # cmd: fuck
@@ -115,60 +115,63 @@ class FunCog(commands.Cog):
 # cmd: dogsaas
     @fun.sub_command(description="Dogs as a Service")
     async def dogsaas(self,inter:disnake.CmdInter):
-        res = re.get("https://dog.ceo/api/breeds/image/random")
+        res = req.get("https://dog.ceo/api/breeds/image/random")
         await inter.send("here is a dog :)")
         await inter.channel.send(res.json()["message"])
 
 # cmd: catsaas
     @fun.sub_command(description="Cats as a Service")
     async def catsaas(self,inter:disnake.CmdInter):
-        res = re.get("https://cataas.com/cat")
+        res = req.get("https://cataas.com/cat")
         await inter.send("here is a cat :)")
         await inter.channel.send(file=disnake.File(io.BytesIO(res.content),"cat.jpg"))
 
 # cmd: foxaas
     @fun.sub_command(description="Foxes as a Service")
     async def foxaas(self,inter:disnake.CmdInter):
-        res = re.get("https://randomfox.ca/floof/")
+        res = req.get("https://randomfox.ca/floof/")
         await inter.send("here is a fox :)")
         await inter.channel.send(res.json()["image"])
 
 # cmd: duckaas
     @fun.sub_command(description="Ducks as a Service")
     async def duckaas(self,inter:disnake.CmdInter):
-        res = re.get("https://random-d.uk/api/v2/random")
+        res = req.get("https://random-d.uk/api/v2/random")
         await inter.send("here is a duck :)")
         await inter.channel.send(res.json()["url"])
 
 # cmd: axolotlaas
+# api is being reworked 5/5
+# https://github.com/AxolotlAPI/what-happened
     @fun.sub_command(description="Axolotl as a Service")
     async def axolotlaas(self,inter:disnake.CmdInter):
-        res = re.get("https://axoltlapi.herokuapp.com/")
+        await inter.send("This is currently being reworked D:\nhttps://github.com/AxolotlAPI/what-happened"); return
+        res = req.get("https://axoltlapi.herokuapp.com/")
         await inter.send("here is a axolotl :)")
         await inter.channel.send(res.json()["url"])
 
 # cmd: catboy
     @fun.sub_command(description="Returns a catboy")
     async def catboy(self,inter:disnake.CmdInter):
-        res = re.get("https://api.catboys.com/img")
+        res = req.get("https://api.catboys.com/img")
         await inter.send(res.json()["url"])
 
 # cmd: animefacts
     @fun.sub_command()
     async def animefacts(self,inter:disnake.CmdInter):
-        res = re.get("https://animechan.vercel.app/api/random")
+        res = req.get("https://animechan.vercel.app/api/random")
         await inter.send(f"{res.json()['character']}: {res.json()['quote']}\n- {res.json()['anime']}")
 
 # cmd: cat link
     @fun.sub_command(description="Cat as a Service; link")
     async def catlink(self,inter:disnake.CmdInter):
-        res = re.get("https://cataas.com/cat?json=true")
+        res = req.get("https://cataas.com/cat?json=true")
         await inter.respond(f"https://cataas.com{res.json()['url']}")
 
 #cmd: fun fact
     @fun.sub_command(description="fun facts!")
     async def funfact(self,inter:disnake.CmdInter):
-        res = re.get("https://api.aakhilv.me/fun/facts")
+        res = req.get("https://api.aakhilv.me/fun/facts")
         await inter.send(res.json()[0])
 
 # cmd: color

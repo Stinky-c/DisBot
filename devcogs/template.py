@@ -15,5 +15,5 @@ class RenameMeCog(commands.Cog):
 
 
 def setup(bot): 
-    
+    logging.getLogger("disnakecommands.RENAMEME").info(f"{__name__} is online") # init logger
     bot.add_cog(RenameMeCog(bot),override=True) 
