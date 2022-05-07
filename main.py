@@ -23,22 +23,23 @@ handlercmd.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %
 loggercmd.addHandler(handlercmd)
 
 
-
 loggercmd = logging.getLogger("disnakecommands.main")
-bot = commands.InteractionBot(sync_commands_debug=True,owner_id=os.environ["BUCKYID"])
+bot = commands.InteractionBot(sync_commands_debug=True,owner_id=int(os.environ["BUCKYID"]))
 # bot = commands.Bot(test_guilds=[771385874688245770,])
 # bot = commands.InteractionBot(test_guilds=[771385874688245770,851204839605927946],sync_commands_debug=True,)
 
 @bot.event
 async def on_ready():
-    loggercmd.info(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
+    loggercmd.debug(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
 
 
 
 @bot.slash_command()
 async def ping(inter:disnake.CmdInter):
-    print(inter)
-    await inter.response.send_message("hello")
+    if not await bot.is_owner(inter.author):
+        inter.send("Oh, you're not Bucky")
+        return
+    await inter.send(f"Pong!\n```{bot.latency}```")
 
 
 
