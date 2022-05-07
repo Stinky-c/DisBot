@@ -24,7 +24,7 @@ loggercmd.addHandler(handlercmd)
 
 
 loggercmd = logging.getLogger("disnakecommands.main")
-bot = commands.InteractionBot(sync_commands_debug=True,owner_id=int(os.environ["BUCKYID"]))
+bot = commands.InteractionBot(sync_commands_debug=True,owner_id=int(os.environ["BUCKYID"]),test_guilds=[851204839605927946])
 # bot = commands.Bot(test_guilds=[771385874688245770,])
 # bot = commands.InteractionBot(test_guilds=[771385874688245770,851204839605927946],sync_commands_debug=True,)
 
