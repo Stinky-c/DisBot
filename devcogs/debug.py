@@ -9,7 +9,7 @@ import logging
 
 class DebugCog(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot:commands.InteractionBot):
         self.loggerl2 = logging.getLogger("disnakecommands.debug.cmd")
         self.bot = bot
 

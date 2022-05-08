@@ -24,7 +24,8 @@ loggercmd.addHandler(handlercmd)
 
 
 loggercmd = logging.getLogger("disnakecommands.main")
-bot = commands.InteractionBot(sync_commands_debug=True,owner_id=int(os.environ["BUCKYID"]),test_guilds=[851204839605927946],intents=disnake.Intents.all(),reload=True)
+# bot = commands.InteractionBot(sync_commands_debug=True,owner_id=int(os.environ["BUCKYID"]),test_guilds=[851204839605927946],intents=disnake.Intents.all())
+bot = commands.InteractionBot(owner_id=int(os.environ["BUCKYID"]),intents=disnake.Intents.all(),sync_commands=True)
 
 @bot.event
 async def on_ready():

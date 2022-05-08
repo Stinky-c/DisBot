@@ -4,7 +4,7 @@ import logging
 
 class RenameMeCog(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot:commands.InteractionBot):
         self.bot = bot
 
     @commands.slash_command()
