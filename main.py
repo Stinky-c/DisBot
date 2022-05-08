@@ -1,23 +1,31 @@
-from datetime import datetime
-import discord
 import os
-import requests as req
-import json
+import disnake
+from disnake.ext import commands
+
+import logging
 from dotenv import load_dotenv
-load_dotenv() # only loads in the same dir
+load_dotenv()
 
-# bot = discord.Bot(debug_guilds=[771385874688245770,],intents=discord.Intents.all())
-bot = discord.Bot(debug_guilds=[771385874688245770,851204839605927946],intents=discord.Intents.all())
-# bot = discord.Bot(debug_guilds=[771385874688245770,851204839605927946])
 
-'''
-Big words that i cant spell
-ephemeral
-description
 
-people i guess:     851204839605927946
-storage:            771385874688245770
-'''
+# https://docs.python.org/3/library/logging.html#module-logging
+
+logger = logging.getLogger('disnake')
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler(filename='disnake.log', encoding='utf-8', mode='w+')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
+loggercmd = logging.getLogger("disnakecommands")
+loggercmd.setLevel(logging.INFO)
+handlercmd = logging.FileHandler(filename='disnakecommands.log', encoding='utf-8', mode='w+')
+handlercmd.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+loggercmd.addHandler(handlercmd)
+
+
+loggercmd = logging.getLogger("disnakecommands.main")
+# bot = commands.InteractionBot(sync_commands_debug=True,owner_id=int(os.environ["BUCKYID"]),test_guilds=[851204839605927946],intents=disnake.Intents.all())
+bot = commands.InteractionBot(owner_id=int(os.environ["BUCKYID"]),intents=disnake.Intents.all(),sync_commands=True)
 
 @bot.event
 async def on_hello(messsage):
@@ -25,30 +33,23 @@ async def on_hello(messsage):
     print(messsage)
 @bot.event
 async def on_ready():
-    # bot.add_view(View())
-    print(f"{bot.user}; {datetime.now()}")
-
-'''@bot.event
-async def on_message(message):
-    if message'''
+    loggercmd.debug(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
 
 
 devcogs = [
     "debug",
-    # "dev"
+    "dev"
 ]
 for cog in devcogs:
     bot.load_extension(f"devcogs.{cog}",)
-    print(f"devcogs.{cog} loaded ")
 
 disabled = [
-    "fun.py",
-    "weather.py"
+    # "fun.py",
+    # "weather.py"
+    # "download.py"
 ] 
 for cog in os.listdir("cogs"):
-    if not os.path.isdir(f"cogs/{cog}") and cog not in disabled: 
+    if os.path.isfile(f"cogs/{cog}") and cog not in disabled: 
         bot.load_extension(f"cogs.{cog.split('.')[0]}",)
-        print(f"cogs.{cog.split('.')[0]} loaded ")
-
+print("running")
 bot.run(os.environ["DISBOTTOKEN1"])
-# bot.run(os.environ["DISBOTTOKEN2"])
