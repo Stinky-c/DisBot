@@ -1,5 +1,4 @@
 pipeline {
-    agent { docker 'python:3.10.1-alpine' }
     stages {
         stage('Build') { 
             steps {
