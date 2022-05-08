@@ -64,10 +64,10 @@ class DevCog(commands.Cog):
         self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
         pass
 
-    @dev.slash_command()
+    @dev.sub_command()
     async def ping(self,inter:disnake.CmdInter):
         if not await self.bot.is_owner(inter.author):
-            inter.send("Oh, you're not Bucky")
+            await inter.send("Oh, you're not Bucky")
             return
         await inter.send(f"Pong!\n```{self.bot.latency}```")
 

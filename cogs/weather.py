@@ -8,7 +8,7 @@ import logging
 
 class Greetings(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot:commands.InteractionBot):
         self.loggerl2 = logging.getLogger("disnakecommands.wttr.cmd")
         self.bot = bot
 
@@ -22,6 +22,12 @@ class Greetings(commands.Cog):
 # cmd: City
     @wttr.sub_command(description="Returns the weather for the city")
     async def city(self,inter:disnake.CmdInter,city:str,):
+        """City - Returns the city
+
+        Args:
+            city (str): name of a city
+            ephemeral (bool): True
+        """
         link = f"https://wttr.in/{city}?T?0?q"  
         res = re.get(link)
         await inter.send(f"```\n{res.content.decode()}\n```",ephemeral=True)
@@ -30,6 +36,11 @@ class Greetings(commands.Cog):
 # cmd: file
     @wttr.sub_command(description="Returns the weather for the city in the json file format. WILL NOT BE HIDDEN")
     async def file(self,inter:disnake.CmdInter,city:str):
+        """Json - uploads the format 1 json file
+
+        Args:
+            city (str): Name of a city
+        """
         link = f"https://wttr.in/{city}?format=j1"
         res = re.get(link)
         await inter.send(f"here is the json to {link}")
@@ -39,6 +50,10 @@ class Greetings(commands.Cog):
 # TODO rewrite ; use dict embed builder
     @wttr.sub_command(description="Returns the weather help message")
     async def help(self,inter:disnake.CmdInter):
+        """Help - Returns the help embed
+
+        Args:
+        """
         embed=disnake.Embed(title="Help", description="The Weather sub command help ", color=0xff7600)
         with open(f"{os.path.dirname(__file__)}/data/help.json") as f:
             tmp = js.load(f)
