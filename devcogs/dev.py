@@ -64,6 +64,13 @@ class DevCog(commands.Cog):
         self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
         pass
 
+    @dev.slash_command()
+    async def ping(self,inter:disnake.CmdInter):
+        if not await self.bot.is_owner(inter.author):
+            inter.send("Oh, you're not Bucky")
+            return
+        await inter.send(f"Pong!\n```{self.bot.latency}```")
+
     @commands.user_command()
     async def avatar(self,inter:disnake.CmdInter, user:disnake.Member):
         embed_dict = {
@@ -86,8 +93,6 @@ class DevCog(commands.Cog):
         "footer": {"icon_url": "https://raw.githubusercontent.com/Stinky-c/Stinky-c/main/svg/it-just-works-somehow.png"},
         }
 
-        # embed = disnake.Embed(title=str(user))
-        # embed.set_image(url=user.display_avatar.url)
         await inter.response.send_message(embed=disnake.Embed.from_dict(embed_dict))
 
     @commands.user_command(name="View Song")

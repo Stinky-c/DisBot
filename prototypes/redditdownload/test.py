@@ -47,10 +47,10 @@ if download:
     pass
     match erm[1]:
         case "video-sound":
-            with open(f"G:\projects\disBot2\{str(time.time()).split('.')[0]}-sound.mp4","wb") as f:
+            with open(f"G:\projects\disBot\{str(time.time()).split('.')[0]}-sound.mp4","wb") as f:
                 f.write(req.get(nexthref).content)
         case "video-no-sound":
-            with open(f"G:\projects\disBot2\{str(time.time()).split('.')[0]}-no-sound.mp4","wb") as f:
+            with open(f"G:\projects\disBot\{str(time.time()).split('.')[0]}-no-sound.mp4","wb") as f:
                 f.write(req.get(nexthref).content)
         case "gif":
             nextcurrent = b64.b64decode(nexthref.replace("/d/","")).decode()
