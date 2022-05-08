@@ -36,9 +36,6 @@ async def on_ready():
     loggercmd.debug(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
 
 
-
-
-
 devcogs = [
     "debug",
     "dev"
