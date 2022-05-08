@@ -1,3 +1,4 @@
+from datetime import datetime
 import disnake
 import aiohttp
 from disnake.ext import commands
@@ -30,7 +31,20 @@ class View(discord.ui.View):
         button.refresh_state(interaction)
 '''
 
-
+class LinkView(disnake.ui.View):
+    '''
+    Takes list of tuples to add buttons addcordingly
+    `[("Label","Link"),("label2","link2")]`
+    or a singular tuple following the same scheme
+    `("label","link")`
+    '''
+    def __init__(self, link:tuple=None,links:list=None):
+        super().__init__()
+        if link:
+            self.add_item(disnake.ui.Button(label=link[0],url=link[1],style=disnake.ButtonStyle.link))
+        if links:
+            for i in links:  
+                self.add_item(disnake.ui.Button(label=i[0],url=i[1],style=disnake.ButtonStyle.link))
 
 
 class DevCog(commands.Cog):
@@ -52,11 +66,46 @@ class DevCog(commands.Cog):
 
     @commands.user_command()
     async def avatar(self,inter:disnake.CmdInter, user:disnake.Member):
-        embed = disnake.Embed(title=str(user))
-        embed.set_image(url=user.display_avatar.url)
-        await inter.response.send_message(embed=embed)
+        embed_dict = {
+        "title": "Embed Title",
+        "description": "Embed Description",
+        "color": 0xFEE75C,
+        "timestamp": datetime.now().isoformat(),
+        "author": {
+            "name": self.bot.user.name,
+            "url": "https://github.com/Stinky-c/",
+            "icon_url": "https://raw.githubusercontent.com/Stinky-c/Stinky-c/main/svg/it-just-works-somehow.png",
+        },
+        "thumbnail": {"url": self.bot.user.display_avatar.url},
+        "fields": [
+            {"name": "Name", "value": user.name, "inline": "false"},
+            {"name": "Inline Title", "value": "Inline Value", "inline": "false"},
+            {"name": "Account creation date", "value": disnake.utils.snowflake_time(user.id).strftime("%a %b %d at %I:%M:%S UTC"), "inline": "false"},
+        ],
+        "image": {"url": user.display_avatar.url},
+        "footer": {"icon_url": "https://raw.githubusercontent.com/Stinky-c/Stinky-c/main/svg/it-just-works-somehow.png"},
+        }
 
+        # embed = disnake.Embed(title=str(user))
+        # embed.set_image(url=user.display_avatar.url)
+        await inter.response.send_message(embed=disnake.Embed.from_dict(embed_dict))
 
+    @commands.user_command(name="View Song")
+    async def spotifysong(self,inter:disnake.CmdInter,user:disnake.Member):
+        if not any(isinstance(x, disnake.Spotify) for x in list(user.activities)):
+            await inter.send("That person is not listening to spotify",ephemeral=True)
+            return
+
+        spot = next((x for x in list(user.activities) if isinstance(x,disnake.Spotify)), None)
+        embed_dict = {
+            "type": "image",
+            "title": spot.title,
+            "description": ", ".join(spot.artists),
+            "color": spot.color.value,
+            "image": {"url": spot.album_cover_url},
+        }
+        await inter.send(embed=disnake.Embed.from_dict(embed_dict),view=LinkView(link=("Track Link",spot.track_url)))
+        self.loggerl2.info(f"{user.name} is listening to '{spot.title}' by '{spot.artists}' on spotify\nLink{spot.track_url}")
     options = ["playing","streaming","listening","watching","custom","competing"]
     @dev.sub_command()
     async def setactivity(self,inter:disnake.CmdInter,name:str,type:str = commands.Param(choices=options),):
@@ -83,32 +132,7 @@ class DevCog(commands.Cog):
         await self.bot.change_presence(activity=newact,status=disnake.Status.idle)
         await inter.send(f"Presence set to `{type} {name}` ")
 
-    @dev.sub_command()
-    async def listvideo(self,inter:disnake.CmdInter,link:str):
-        if not re.match(self.urlreg,link):
-            await inter.send("Please provide a valid link\n Example:`https://www.youtube.com/watch?v=dQw4w9WgXcQ` or `https://youtu.be/dQw4w9WgXcQ`")
-            return
-        yt = YouTube(link)
-        vids = yt.streams
-        await inter.send("printed to console")
-        print(vids)
 
-    @dev.sub_command()
-    async def getvideo(self,inter:disnake.CmdInter,link:str,itag:int):
-        if not re.match(self.urlreg,link):
-            await inter.send("Please provide a valid link\n Example:`https://www.youtube.com/watch?v=dQw4w9WgXcQ` or `https://youtu.be/dQw4w9WgXcQ`")
-            return
-        yt = YouTube(link)
-        vid = yt.streams.get_by_itag(itag)
-        if vid.filesize >= 8388608:
-            self.loggerl2.info(f"'{inter.user.name}' downloaded '{yt.title}'; size: {round(vid.filesize/1024,5)}kb\ndata: '{vid}'")
-            await inter.send("Failed")
-            return
-        await inter.response.defer()
-        with tempfile.TemporaryDirectory() as td:
-            self.loggerl2.info(f"'{inter.user.name}' downloaded '{yt.title}'; size: {round(vid.filesize/1024,5)}kb\ndata: '{vid}'")
-            await inter.send(file=disnake.File(vid.download(td)))
-            return
 
 
     '''
