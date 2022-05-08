@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import requests as req
 import random as rnd
 import json
-import os
+import git
 from urllib import parse
 import io
 import tempfile
@@ -58,18 +58,24 @@ class DevCog(commands.Cog):
 
 
 
-
     @commands.slash_command()
     async def dev(self,inter:disnake.CmdInter):
         self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
         pass
 
     @dev.sub_command()
+    async def refresh(self,inter:disnake.CmdInter,reboot:bool):
+        if not await self.bot.is_owner(inter.author):
+            await inter.send("You cant run this command.")
+            return
+        await inter.send(git.cmd.Git().pull())
+
+    @dev.sub_command()
     async def ping(self,inter:disnake.CmdInter):
         if not await self.bot.is_owner(inter.author):
             await inter.send("Oh, you're not Bucky")
             return
-        await inter.send(f"Pong!\n```{self.bot.latency}```")
+        await inter.send(f"Pong!\n```{round(self.bot.latency)}```")
 
     @commands.user_command()
     async def avatar(self,inter:disnake.CmdInter, user:disnake.Member):
