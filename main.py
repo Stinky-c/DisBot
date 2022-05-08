@@ -25,8 +25,6 @@ loggercmd.addHandler(handlercmd)
 
 loggercmd = logging.getLogger("disnakecommands.main")
 bot = commands.InteractionBot(sync_commands_debug=True,owner_id=int(os.environ["BUCKYID"]),test_guilds=[851204839605927946],intents=disnake.Intents.all(),reload=True)
-# bot = commands.Bot(test_guilds=[771385874688245770,])
-# bot = commands.InteractionBot(test_guilds=[771385874688245770,851204839605927946],sync_commands_debug=True,)
 
 @bot.event
 async def on_hello(messsage):
@@ -37,9 +35,6 @@ async def on_ready():
     loggercmd.debug(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
 
 
-'''@bot.event
-async def on_message(message):
-    if message'''
 
 
 

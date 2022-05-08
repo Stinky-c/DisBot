@@ -16,6 +16,8 @@ class DebugCog(commands.Cog):
         
     @commands.slash_command()
     async def debug(self,inter:disnake.CmdInter):
+        if not await self.bot.is_owner(inter.author):
+            return
         self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
         pass
     @debug.sub_command(description="test")
