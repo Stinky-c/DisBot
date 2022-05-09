@@ -188,6 +188,8 @@ class DevCog(commands.Cog):
         }
         await inter.send(embed=disnake.Embed.from_dict(embed_dict),view=LinkView(link=("Track Link",spot.track_url)))
         self.loggerl2.info(f"{user.name} is listening to '{spot.title}' by '{spot.artists}' on spotify\nLink{spot.track_url}")
+
+# TODO add status option
     options = ["playing","streaming","listening","watching","custom","competing"]
     @dev.sub_command()
     async def setactivity(self,inter:disnake.CmdInter,name:str,type:str = commands.Param(choices=options),):
@@ -211,7 +213,7 @@ class DevCog(commands.Cog):
             case _:
                 newact = disnake.Activity(name="Unknown",activity=disnake.ActivityType.custom)
         self.loggerl2.info(f"setting activity to '{newact}'")
-        await self.bot.change_presence(activity=newact,status=disnake.Status.idle)
+        await self.bot.change_presence(activity=newact)
         await inter.send(f"Presence set to `{type} {name}` ")
 
 
