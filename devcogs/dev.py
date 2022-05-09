@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 import requests as req
 import random as rnd
 import json
-import git
 from urllib import parse
 import io
 import tempfile
@@ -55,6 +54,65 @@ class DevCog(commands.Cog):
         self.loggerl2 = logging.getLogger("disnakecommands.dev.cmd")
         self.redditreg = re.compile(r"https://www\.reddit\.com/r/.*")
         self.aioclient = aiohttp.ClientSession()
+        self.quotes = [
+            "Cave Johnson here, Science isn't about why, it's about why not.",
+            "I’ve come to a point in my life where I need a stronger word than fuck",
+            "With great power comes great need to take a nap. Wake me up later.",
+            "Fool me once, I’m gonna kill you",
+            "If I see a bug, I simply leave the room elegantly and require someone else do something about it. If no one fulfills my wish, I simply never go back in there.",
+            "Well, well, well, if it isn't the consequences of my actions.",
+            "Well, well, well... if it isn’t my old friend: the dawning realization that I fucked up bad."
+            "I was born for politics. I have great hair and I love lying.",
+            "Sometimes I wonder if I'm hearing voices. Then I remember that's the last bit of sanity I have trying to get me to fall asleep at a reasonable time.",
+            "I am very small and I have no money, so you can imagine the kind of stress that I'm under.",
+            "I've never encountered a problem that can't be solved by an spontaneous musical number.",
+            "I scare people a lot because I walk very softly and they don't hear me enter rooms. So when they turn around, I'm just kind of there and their fear fuels me.",
+            "Well, needless to say. Uh-oh Spaghetti-os.",
+            "I will send my army to attack! *releases a dumpster of raccoons*",
+            "And remember, if I get harsh with you it is only because you're doing it all wrong.",
+            "I'm allergic to death.",
+            "I'm a firm believer in \"if you're going to fail, you might as well fail spectacularly.\"",
+            "As someone who has a long history of not understanding anything, I feel confident in my ability to continue not knowing what is going on.",
+            "Fruits that do not live up to their names; passionfruit, grapefruit, honeydew and dragonfruit. Fruits that do live up to their names? Orange.",
+            "Can I offer you a nice stick in this trying time?",
+            "Firstly, how dare you use mathematics to make me look stupid! I'm actually very good at mathematics. Thirdly, I think you might be right.",
+            "I'm not a morning person. I'm barely even a person.",
+            "I warned you. I'm perfect.",
+            "We got a free day now. What do you wanna do? Eat? Sleep? Nap? Snack?",
+            "Underestimate me. That'll be fun.",
+            "I don't follow the rules. I follow dogs on social media.",
+            "I like to play this game called nap roulette. I take a nap and don't set an alarm. Will it be 20 min or 4 hours? Nobody knows. It's risky and I like it.",
+            "It began as a mistake",
+            "Atoms can never touch each other, and we are made of atoms, therefore no I did not push the baby.",
+            "If you buy a bigger bed, you're left with more bed room, but less bedroom.",
+            "I may be able to stand, but I cant stand this",
+            "*Monkey noises*",
+            "If a fly didn't have wings, would it be called a walk?",
+            "It's not ugly, just aesthetically challenged.",
+            "I have a philosophy in life; if the seat is open, the job is open. That’s how I came to briefly drive a Formula 1 car.",
+            "Do you ever think? Because I do not.",
+            "Don't worry, I have your phone! Text me when you're gonna come get it!",
+            "Physically, yes, I could fight a bird. But emotionally? Imagine the toll.",
+            "People are always asking me if I'm a morning person or a night person. I'm just like, 'Buddy! I'm barely even a PERSON!'",
+            "Dear friends, your Christmas gift this year… is me. That’s right, another year of friendship. Your membership has been renewed.",
+            "When someone points at your black clothes and asks whose funeral it is, having a look around the room and saying 'Haven’t decided yet' is typically a good response.",
+            "Not trying to brag or anything, but I can wake up without an alarm clock now simply due to my crippling and overwhelming anxiety, so...",
+            "I’m sick and tired of being called 'mortal' like, you don’t know that. Neither do I. I have never died even ONCE. Nothing has been proven yet. Stop making assumptions. It’s rude.",
+            "BEHOLD, the field in which I grow my fucks! Lay thine eyes upon it, and thou shalt see that it is barren!",
+            "You seem familiar, have I threatened you before?",
+            "Okay okay stop asking me if I'm straight, gay, bi, whatever. I identify as a FUCKING THREAT.",
+            "My life isn’t as glamorous as my wanted poster makes it look like.",
+            "So apparently the 'bad vibes' I’ve been feeling are actually severe psychological distress"
+            ]
+        self.talanquotes = [
+            "You’ll have a hard time believing this because it never happens, but I made a mistake.",
+            "C# bad, python good",
+            "Okay, are you like BLIND? You look nothing like me. First off, I'm way taller. Secondly, I DO NOT look so sleep deprived and lastly, if you could drag comb through that hair you're like a 7 on a good day and I've been told I'm a constant 10.",
+            "You think I really give a fuck? I can’t even read.",
+            "I was made to remind you a few things. but if I were to tell you I don't think it would have effect.",
+            "Schrödinger’s cat is overrated. If you wanna see something that’s both dead and alive you can talk to me any time of the day.",
+            "I’m going to defeat you with the power of friendship! ... And this knife I found."
+        ]
 
 
 
@@ -64,11 +122,24 @@ class DevCog(commands.Cog):
         pass
 
     @dev.sub_command()
-    async def refresh(self,inter:disnake.CmdInter,reboot:bool):
+    async def stop(self,inter:disnake.CmdInter):
         if not await self.bot.is_owner(inter.author):
             await inter.send("You cant run this command.")
             return
-        await inter.send(git.cmd.Git().pull())
+        try:
+            await inter.send(rnd.choice(self.quotes))
+            await self.bot.close()
+        except Exception:
+            pass
+    @dev.sub_command()
+    async def tell(self,inter:disnake.CmdInter,user:disnake.User):
+        if not await self.bot.is_owner(inter.author):
+            await inter.send("You are not bucky.",ephemeral=True)
+            return
+        quote = rnd.choice(self.talanquotes)
+        self.loggerl2.info(f"I told '{user.name}' '{quote}'... don't worry")
+        await user.send(quote+"\n-Bucky")
+        await inter.send("Sent",ephemeral=True)
 
     @dev.sub_command()
     async def ping(self,inter:disnake.CmdInter):

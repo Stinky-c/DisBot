@@ -138,5 +138,5 @@ class DownloadCog(commands.Cog):
             self.loggerl2.info(f"'{inter.user.name}' downloaded a reddit video size: {round(int(res.headers.get('Content-Length'))/1024,5)}kb\nurl: '{download}'")
     '''
 def setup(bot): 
-    logging.getLogger("disnakecommands.RENAMEME").info(f"{__name__} is online") # init logger
+    logging.getLogger("disnakecommands.download").info(f"{__name__} is online") # init logger
     bot.add_cog(DownloadCog(bot),override=True) 
