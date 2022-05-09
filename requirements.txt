@@ -1,6 +1,7 @@
 aiodns==3.0.0
 aiohttp==3.8.1
 aiosignal==1.2.0
+anyconfig==0.13.0
 async-timeout==4.0.2
 attrs==21.4.0
 beautifulsoup4==4.11.1
@@ -19,5 +20,6 @@ python-dotenv==0.20.0
 pytube @ git+https://github.com/kinshuk-h/pytube@72075dddb2153bde89a8de9eb8def91d41da3655
 requests==2.27.1
 soupsieve==2.3.2.post1
+toml==0.10.2
 urllib3==1.26.9
 yarl==1.7.2

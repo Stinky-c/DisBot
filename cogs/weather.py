@@ -5,12 +5,16 @@ import requests as re
 import json as js
 import io
 import logging
+import anyconfig
 
 class Greetings(commands.Cog):
 
     def __init__(self, bot:commands.InteractionBot):
         self.loggerl2 = logging.getLogger("disnakecommands.wttr.cmd")
         self.bot = bot
+        self.configpath = os.path.dirname(__file__)+"/data/config.toml"
+        self.quotes = anyconfig.load(self.configpath)["quotes"]["quotes"]
+
 
     @commands.slash_command()
     async def wttr(self,inter:disnake.CmdInter):
