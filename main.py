@@ -28,10 +28,6 @@ bot = commands.InteractionBot(sync_commands_debug=True,owner_id=int(os.environ["
 # bot = commands.InteractionBot(owner_id=int(os.environ["BUCKYID"]),intents=disnake.Intents.all(),sync_commands=True)
 
 @bot.event
-async def on_hello(messsage):
-    print("hello world")
-    print(messsage)
-@bot.event
 async def on_ready():
     loggercmd.debug(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
 

@@ -28,7 +28,6 @@ class DownloadCog(commands.Cog):
 
         pass
 # cmd: youtubedownload
-# TODO write sort algorithm for file size or give options
 # IDEA add filesize to pytube stream object
     @download.sub_command(description="Downloads a YouTube video from a link returning the best video under 8mb")
     async def youtube(self,inter:disnake.CmdInter,link:str):
@@ -66,8 +65,9 @@ class DownloadCog(commands.Cog):
             self.loggerl2.error(e)
             self.loggerl2.error(f"the downloading of '{yt.title}' has errored")
             await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
+
 # cmd : redditdownload
-# TODO fix it
+# TODO improve it
     @download.sub_command()
     async def reddit(self,inter:disnake.CmdInter,link:str):
         """Downloads a Reddit video as a file, or a Gif as a link
@@ -112,7 +112,7 @@ class DownloadCog(commands.Cog):
                     return
                 case "gif":
                     nextcurrent = b64.b64decode(nexthref.replace("/d/","")).decode()
-                    await inter.send(nextcurrent)
+                    await inter.send(f"<{nextcurrent}>\n{nextcurrent}")
                     self.loggerl2.info(f"gif: {inter.author} downloaded '{link}'")
                     return
                 case "generic":
@@ -123,20 +123,6 @@ class DownloadCog(commands.Cog):
                     await inter.send("This post has errored")
                     self.loggerl2.error(f"'{link}' errored for an unknown reason")
                     return
-    '''
-            if download is None:
-                await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
-                return
-            await inter.response.defer()
-            res = req.get(download)
-            if int(res.headers.get("Content-Length")) >= 8388608:
-                await inter.send(f"The file is too large\nHere is the link {download}")
-                return
-            currnettime=str(time.time()).split(".")[0]
-            
-            await inter.send(file=disnake.File(io.BytesIO(res.content),currnettime+".jpg" if res.headers.get("Content-Type") == "image/jpeg" else currnettime+".mp4"))
-            self.loggerl2.info(f"'{inter.user.name}' downloaded a reddit video size: {round(int(res.headers.get('Content-Length'))/1024,5)}kb\nurl: '{download}'")
-    '''
 def setup(bot): 
     logging.getLogger("disnakecommands.download").info(f"{__name__} is online") # init logger
     bot.add_cog(DownloadCog(bot),override=True) 
