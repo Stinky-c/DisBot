@@ -3,4 +3,4 @@ venv/
 .env
 disnake.log
 disnakecommands.log
-prototypes2/
+prototypes/

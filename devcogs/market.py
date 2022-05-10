@@ -44,8 +44,6 @@ class MarketCog(commands.Cog):
             await inter.send("you are already registered")
             return
 
-
-
         self.con.execute(f"INSERT INTO users VALUES (?,?,?)",(inter.author.id,100,inter.author.name))
         await inter.send("you are now registered")
         self.con.commit()
