@@ -34,18 +34,20 @@ async def on_ready():
 
 devcogs = [
     "debug",
-    "dev"
+    "dev",
+    "market"
 ]
 for cog in devcogs:
     bot.load_extension(f"devcogs.{cog}",)
 
 disabled = [
-    # "fun.py",
-    # "weather.py"
-    # "download.py"
+    "fun.py",
+    "weather.py"
+    "download.py"
 ] 
 for cog in os.listdir("cogs"):
     if os.path.isfile(f"cogs/{cog}") and cog not in disabled: 
         bot.load_extension(f"cogs.{cog.split('.')[0]}",)
+
 print("running")
 bot.run(os.environ["DISBOTTOKEN1"])

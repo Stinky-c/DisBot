@@ -16,14 +16,24 @@
 
 ---
 ### ideas
-- [ ] a database based game
+- WIP market game
+    - 
+
+- downloaders
+    - supported
+        - youtube   - needs a better way, could stream the audio and video together
+        - reddit    - stream audio and video to be able to download from website
+    - TODO
+        - [tiktok](https://taksave.com/)
+
+
+- [ ] database drivers
     - [sqlite3 DB driver](https://github.com/plasticityai/supersqlite)
     - [mongo DBdriver ](https://github.com/mongodb/motor)
     - [async sqlite3 driver](https://aiosqlite.omnilib.dev/en/latest/)
-    - Ideas - top down: Best to worst 
-        - Stock market?
-        - pokemon like?
-        - pets?
+
+
+
 - [ ] website
     - provide tools from bot?
     - admin panel for bot?
