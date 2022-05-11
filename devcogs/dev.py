@@ -13,6 +13,8 @@ import re
 import urllib
 from pytube import YouTube
 import logging
+from definitions import *
+
 from dotenv import load_dotenv
 load_dotenv()
 '''
@@ -54,9 +56,8 @@ class DevCog(commands.Cog):
         self.loggerl2 = logging.getLogger("disnakecommands.dev.cmd")
         self.redditreg = re.compile(r"https://www\.reddit\.com/r/.*")
         self.aioclient = aiohttp.ClientSession()
-        self.configpath = os.path.dirname(__file__)+"/config.toml"
-        self.closequotes = anyconfig.load(self.configpath)["quotes"]["closequotes"]
-        self.talanquotes = anyconfig.load(self.configpath)["quotes"]["talanquotes"]
+        self.closequotes = ROOT_CONFIG["quotes"]["closequotes"]
+        self.talanquotes = ROOT_CONFIG["quotes"]["talanquotes"]
 
 
 
@@ -72,7 +73,7 @@ class DevCog(commands.Cog):
             return
         try:
             await inter.send(rnd.choice(self.closequotes))
-            # await self.bot.close()
+            await self.bot.close()
         except Exception:
             pass
     @dev.sub_command()

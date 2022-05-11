@@ -15,6 +15,8 @@ import json
 import urllib
 import logging
 
+from definitions import ROOT_CONFIG
+
 path = f"{os.path.dirname(__file__)}/data/random/{rnd.choice(os.listdir(os.path.dirname(__file__)+'/data/random/'))}"
 with open(path) as f:
     fuckjs:dict = json.load(f)
@@ -35,8 +37,7 @@ class FunCog(commands.Cog):
         self.loggerl2 = logging.getLogger("disnakecommands.fun.cmd")
         self.bot = bot
         self.aioclient = aiohttp.ClientSession()
-        self.configpath = os.path.dirname(__file__)+"/data/config.toml"
-        self.quotes = anyconfig.load(self.configpath)["quotes"]["quotes"]
+        self.quotes = ROOT_CONFIG["quotes"]["closequotes"]
 
     @commands.slash_command()
     async def fun(self,inter:disnake.CmdInter):
