@@ -102,11 +102,17 @@ class DownloadCog(commands.Cog):
             match video[1]:
                 case "video-sound":
                     async with self.aiohttp.get(nexthref) as res:
+                        if len(await res.read()) >= 8388608:
+                            await inter.send("The file is too large")
+                            return
                         await inter.send(file=disnake.File(io.BytesIO(await res.read()),f"{str(time.time()).split('.')[0]}-sound.mp4"))
                     self.loggerl2.info(f"sound video: {inter.author} downloaded '{link}'")
                     return
                 case "video-no-sound":
                     async with self.aiohttp.get(nexthref) as res:
+                        if len(await res.read()) >= 8388608:
+                            await inter.send("The file is too large")
+                            return
                         await inter.send(file=disnake.File(io.BytesIO(await res.read()),f"{str(time.time()).split('.')[0]}-no-sound.mp4"))
                     self.loggerl2.info(f"no sound video: {inter.author} downloaded '{link}'")
                     return
@@ -123,7 +129,7 @@ class DownloadCog(commands.Cog):
                     await inter.send("This post has errored")
                     self.loggerl2.error(f"'{link}' errored for an unknown reason")
                     return
-    '''
+'''
             if download is None:
                 await inter.send("Something went ***really*** wrong\nPlease contact Bucky")
                 return
@@ -133,10 +139,10 @@ class DownloadCog(commands.Cog):
                 await inter.send(f"The file is too large\nHere is the link {download}")
                 return
             currnettime=str(time.time()).split(".")[0]
-            
+
             await inter.send(file=disnake.File(io.BytesIO(res.content),currnettime+".jpg" if res.headers.get("Content-Type") == "image/jpeg" else currnettime+".mp4"))
             self.loggerl2.info(f"'{inter.user.name}' downloaded a reddit video size: {round(int(res.headers.get('Content-Length'))/1024,5)}kb\nurl: '{download}'")
-    '''
+'''
 def setup(bot): 
     logging.getLogger("disnakecommands.download").info(f"{__name__} is online") # init logger
     bot.add_cog(DownloadCog(bot),override=True) 
