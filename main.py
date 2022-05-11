@@ -2,6 +2,7 @@ import os
 import disnake
 from disnake.ext import commands
 import anyconfig
+import random as rnd
 
 import logging
 from dotenv import load_dotenv
@@ -30,7 +31,11 @@ bot = commands.InteractionBot(
     owner_ids=tml["id"]["ownerids"],
     test_guilds=tml["id"]["guilds"],
     intents=disnake.Intents.all(),
-    status=disnake.Activity(name=tml["status"]["message"],type=disnake.ActivityType.watching))
+    status=disnake.Activity(
+        name=tml["status"]["message"],
+        type=disnake.ActivityType.watching
+        )
+    )
 
 @bot.event
 async def on_ready():
@@ -41,6 +46,12 @@ async def on_ready():
 #     loggercmd.error(event+args+kwargs)
 #     pass
 
+@bot.event
+async def on_message(message:disnake.Message):
+    chance = tml['random']
+    if rnd.randint(chance["min"],chance["max"]) == 3:
+        await message.add_reaction('🐄')
+        loggercmd.info(f"'{message.id}' in '{message.channel}' rolled the dice and won\n'{message.jump_url}'")
 
 for cog in tml["cogs"]["devcogs"]:
     bot.load_extension(f"devcogs.{cog}",)

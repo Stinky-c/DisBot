@@ -21,7 +21,10 @@
     ]
 
 [status]
-message = "the ducks"
+    message = "the ducks"
+[random]
+    min = 1
+    max = 1000000000
 
 [quotes]
     closequotes = [
