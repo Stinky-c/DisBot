@@ -1,16 +1,11 @@
-from bs4 import BeautifulSoup
-from urllib import parse
-import random 
+import random as rnd
 import disnake
 from disnake.ext import commands
-from pytube import YouTube
-import tempfile
 import io
-import anyconfig
 import aiohttp
-import requests as req
+from views import LinkView
 import random as rnd
-import os 
+import os
 import json
 import urllib
 import logging
@@ -24,11 +19,6 @@ with open(path) as f:
 for fucking in fuckjs:
     howfuck.append(fucking["name"])
 
-class LinkView(disnake.ui.View):
-    def __init__(self, link:str):
-        super().__init__()
-        self.link = link
-        self.add_item(disnake.ui.Button(label="Link",url=link,style=disnake.ButtonStyle.green))
 
 
 class FunCog(commands.Cog):
@@ -198,7 +188,7 @@ class FunCog(commands.Cog):
         """
         async with self.aioclient.get("https://api.publicapis.org/random") as res:
             js = (await res.json()) ["entries"][0]
-            await inter.send(f"```Name: {js['API']}\nDescription: {js['Description']}\nAuth: {js['Auth']}\nCORS: {js['Cors']}\nLink: {js['Link']}\n```",view=LinkView(js["Link"]))
+            await inter.send(f"```Name: {js['API']}\nDescription: {js['Description']}\nAuth: {js['Auth']}\nCORS: {js['Cors']}\nLink: {js['Link']}\n```",view=LinkView(("Home Page",js["Link"])))
 
 
 # cmd: RPS
@@ -215,7 +205,7 @@ class FunCog(commands.Cog):
         await inter.response.send_message(f"You {rnd.choice(['won','lost','tied'])}!")
     @fun.sub_command()
     async def quote(self,inter:disnake.CmdInter,amount:int=commands.Param(0,lt=15,gt=0)):
-        await inter.send("\n".join(random.choices(self.quotes,k=amount)))
+        await inter.send("\n".join(rnd.choices(self.quotes,k=amount)))
 
 
 def setup(bot): 

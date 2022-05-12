@@ -13,6 +13,10 @@ class RenameMeCog(commands.Cog):
 
         pass
 
+    async def cog_load(self):
+        # async functions here
+        pass
+
 
 def setup(bot): 
     logging.getLogger("disnakecommands.RENAMEME").info(f"{__name__} is online") # init logger

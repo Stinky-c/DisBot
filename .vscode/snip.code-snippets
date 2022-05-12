@@ -1,0 +1,15 @@
+{
+	"isonwer":{
+	"prefix": "isowner",
+	"body":[
+			"if not await self.bot.is_owner(inter.author):",
+			"\tawait inter.send(\"You are not bucky.\",ephemeral=True)",
+			"\treturn"
+		]
+
+	},
+	"newcmd":{
+		"prefix": "newcmd",
+		"body": "async def $1(self,inter:disnake.CmdInter):"
+	}
+}

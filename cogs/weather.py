@@ -1,21 +1,19 @@
 import disnake
 from disnake.ext import commands
 import os
-import requests as re 
 import json as js
 import io
 import logging
-import anyconfig
+import aiohttp
 
 class Greetings(commands.Cog):
 
     def __init__(self, bot:commands.InteractionBot):
         self.loggerl2 = logging.getLogger("disnakecommands.wttr.cmd")
         self.bot = bot
+        self.aiohttp = aiohttp.ClientSession()
 
-    async def cog_load(self):
-        # async functions here
-        pass
+
 
     @commands.slash_command()
     async def wttr(self,inter:disnake.CmdInter):
@@ -34,8 +32,8 @@ class Greetings(commands.Cog):
             ephemeral (bool): True
         """
         link = f"https://wttr.in/{city}?T?0?q"  
-        res = re.get(link)
-        await inter.send(f"```\n{res.content.decode()}\n```",ephemeral=True)
+        with self.aiohttp.get(link) as res:
+            await inter.send(f"```\n{res.content.decode()}\n```",ephemeral=True)
 
 
 # cmd: file
@@ -47,9 +45,9 @@ class Greetings(commands.Cog):
             city (str): Name of a city
         """
         link = f"https://wttr.in/{city}?format=j1"
-        res = re.get(link)
-        await inter.send(f"here is the json to {link}")
-        await inter.channel.send(file=disnake.File(io.BytesIO(res.content),"response.json"))
+        with self.aiohttp.get(link) as res:
+            await inter.send(f"here is the json to {link}")
+            await inter.channel.send(file=disnake.File(io.BytesIO(res.content),"response.json"))
 
 # cmd: help
 # TODO rewrite ; use dict embed builder

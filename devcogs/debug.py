@@ -61,4 +61,4 @@ class DebugCog(commands.Cog):
 
 def setup(bot): 
     logging.getLogger("disnakecommands.debug").info(f"{__name__} is online") # init logger
-    bot.add_cog(DebugCog(bot),override=True) 
+    bot.add_cog(DebugCog(bot),override=True)

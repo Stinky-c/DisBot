@@ -12,7 +12,10 @@ tml = anyconfig.load("./config.toml")
 
 # https://docs.python.org/3/library/logging.html#module-logging
 
+#alias
 logconf =  tml["logging"]
+chance = tml['random']
+
 logger = logging.getLogger('disnake')
 logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename=logconf["bot"]["path"], encoding=logconf["encoding"], mode=logconf["method"])
@@ -49,7 +52,6 @@ async def on_ready():
 
 @bot.event
 async def on_message(message:disnake.Message):
-    chance = tml['random']
     if rnd.randint(chance["min"],chance["max"]) == 3:
         await message.add_reaction('🐄')
         loggercmd.info(f"'{message.id}' in '{message.channel}' rolled the dice and won\n'{message.jump_url}'")
