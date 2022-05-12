@@ -25,6 +25,10 @@
         - reddit    - stream audio and video to be able to download from website
     - TODO
         - [tiktok](https://taksave.com/)
+        - [instagram](https://igram.io)
+            - https://www.instagram.com/p/CdYi-2arvAV/
+            - https://www.instagram.com/p/CdYejSVMrXq/
+            - https://www.instagram.com/reel/CcqWe5cqnKh/
 
 
 - [ ] database drivers

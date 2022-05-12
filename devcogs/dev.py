@@ -156,7 +156,7 @@ class DevCog(commands.Cog):
             case _:
                 newact = disnake.Activity(name="Unknown",activity=disnake.ActivityType.custom)
         self.loggerl2.info(f"setting activity to '{newact}'")
-        await self.bot.change_presence(activity=newact,status=disnake.Status.idle)
+        await self.bot.change_presence(activity=newact,)
         await inter.send(f"Presence set to `{type} {name}` ")
 
 

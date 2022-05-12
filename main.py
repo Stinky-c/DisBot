@@ -7,34 +7,35 @@ import random as rnd
 import logging
 from dotenv import load_dotenv
 load_dotenv()
+tml = anyconfig.load("./config.toml")
 
 
 # https://docs.python.org/3/library/logging.html#module-logging
 
+logconf =  tml["logging"]
 logger = logging.getLogger('disnake')
 logger.setLevel(logging.INFO)
-handler = logging.FileHandler(filename='disnake.log', encoding='utf-8', mode='w+')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+handler = logging.FileHandler(filename=logconf["bot"]["path"], encoding=logconf["encoding"], mode=logconf["method"])
+handler.setFormatter(logging.Formatter(logconf["bot"]["format"]))
 logger.addHandler(handler)
 
 loggercmd = logging.getLogger("disnakecommands")
 loggercmd.setLevel(logging.INFO)
-handlercmd = logging.FileHandler(filename='disnakecommands.log', encoding='utf-8', mode='a+')
-handlercmd.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+handlercmd = logging.FileHandler(filename=logconf["commands"]["path"], encoding=logconf["encoding"], mode=logconf["method"])
+handlercmd.setFormatter(logging.Formatter(logconf["commands"]["format"]))
 loggercmd.addHandler(handlercmd)
 loggercmd = logging.getLogger("disnakecommands.main")
-
-tml = anyconfig.load("./config.toml")
 
 bot = commands.InteractionBot(
     sync_commands_debug=True,
     owner_ids=tml["id"]["ownerids"],
     test_guilds=tml["id"]["guilds"],
     intents=disnake.Intents.all(),
-    status=disnake.Activity(
+    activity=disnake.Activity(
         name=tml["status"]["message"],
-        type=disnake.ActivityType.watching
-        )
+        type=getattr(disnake.ActivityType,tml["status"]["type"])
+        ),
+    status=getattr(disnake.Status,tml["status"]["status"])
     )
 
 @bot.event

@@ -13,6 +13,9 @@ class Greetings(commands.Cog):
         self.loggerl2 = logging.getLogger("disnakecommands.wttr.cmd")
         self.bot = bot
 
+    async def cog_load(self):
+        # async functions here
+        pass
 
     @commands.slash_command()
     async def wttr(self,inter:disnake.CmdInter):
