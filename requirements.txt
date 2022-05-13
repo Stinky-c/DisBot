@@ -17,6 +17,7 @@ multidict==6.0.2
 orjson==3.6.8
 pycares==4.1.2
 pycparser==2.21
+PyNaCl==1.5.0
 python-dotenv==0.20.0
 pytube @ git+https://github.com/kinshuk-h/pytube@72075dddb2153bde89a8de9eb8def91d41da3655
 requests==2.27.1

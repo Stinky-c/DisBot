@@ -10,7 +10,6 @@ load_dotenv()
 tml = anyconfig.load("./config.toml")
 
 
-# https://docs.python.org/3/library/logging.html#module-logging
 
 #alias
 logconf =  tml["logging"]
@@ -46,9 +45,11 @@ async def on_ready():
     loggercmd.debug(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
 
 # @bot.event
-# async def on_error(event,*args, **kwargs):
-#     loggercmd.error(event+args+kwargs)
-#     pass
+# async def on_slash_command_error(inter:disnake.CmdInter,error,*args, **kwargs):
+#     await inter.send("This command errored, Sorry")
+#     dm = bot.get_channel(logconf["erorrchannel"])
+#     await dm.send(error)
+#     loggercmd.error(f"a command errored in '{inter.guild}' '#{inter.channel}'\nargs: '{args}'kwargs: \n{kwargs}")
 
 @bot.event
 async def on_message(message:disnake.Message):
@@ -60,7 +61,7 @@ for cog in tml["cogs"]["devcogs"]:
     bot.load_extension(f"devcogs.{cog}",)
 
 for cog in os.listdir("cogs"):
-    if os.path.isfile(f"cogs/{cog}") and cog not in tml["cogs"]["disabled"]: 
+    if cog.endswith(".py") and cog not in tml["cogs"]["disabled"]: 
         bot.load_extension(f"cogs.{cog.split('.')[0]}",)
 
 print("running")

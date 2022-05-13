@@ -1,17 +1,13 @@
+import asyncio
 from datetime import datetime
+from typing import Optional
 import disnake
 import aiohttp
 from disnake.ext import commands
-from bs4 import BeautifulSoup
 import requests as req
 import random as rnd
 import json
-from urllib import parse
-import anyconfig
-import os
 import re
-import urllib
-from pytube import YouTube
 import logging
 from definitions import *
 
@@ -31,22 +27,83 @@ class View(discord.ui.View):
         button.label = button.label+"1"
         button.refresh_state(interaction)
 '''
+# Welcome to callback hell
+class MyModal(disnake.ui.Modal):
+    def __init__(self,custom_id):
+        components = [
+            disnake.ui.TextInput(
+                label="Song Link",
+                custom_id="link",
+                style=disnake.TextInputStyle.short,
+                max_length=50,
+            ),
+        ]
+        super().__init__(
+            title="Create Tag",
+            custom_id=custom_id,
+            components=components,
+        )
+    async def callback(self, inter: disnake.ModalInteraction):
+        await inter.send(f"'{inter.text_values.get('link',None)}' has been added!",ephemeral=True)
 
-class LinkView(disnake.ui.View):
-    '''
-    Takes list of tuples to add buttons addcordingly
-    `[("Label","Link"),("label2","link2")]`
-    or a singular tuple following the same scheme
-    `("label","link")`
-    '''
-    def __init__(self, link:tuple=None,links:list=None):
-        super().__init__()
-        if link:
-            self.add_item(disnake.ui.Button(label=link[0],url=link[1],style=disnake.ButtonStyle.link))
-        if links:
-            for i in links:  
-                self.add_item(disnake.ui.Button(label=i[0],url=i[1],style=disnake.ButtonStyle.link))
+    async def on_error(self, error: Exception, inter: disnake.ModalInteraction):
+        await inter.send(f"An error occurred!\n```{error}```")
+    async def on_timeout(self,):
+        pass
 
+class VcView(disnake.ui.View):
+    # add some verbose to this
+    def __init__(self, *, timeout:Optional[float]=180,vc:disnake.VoiceClient,inter:disnake.CmdInter,bot:commands.Bot):
+        super().__init__(timeout=timeout)
+        self.vc = vc
+        self.inter = inter
+        self.bot = bot
+        self.info = {
+            "playing": False,
+            "songs":[
+                # list of songs
+            ],
+            "channel": False
+        }
+
+    def poll(self,inter:disnake.CmdInter,*args, **kwargs):
+        # updates the message list
+        # use a dict and make a function to return it as a usable string
+        pass
+    @disnake.ui.button(label="Toggle Pause",style=disnake.ButtonStyle.green)
+    async def pauseCallback(self,button:disnake.Button,inter:disnake.CmdInter):
+        status = self.vc.is_paused()
+        match status:
+            case True:
+                self.vc.resume()
+                self.info["playing"] = True
+            case False:
+                self.vc.pause()
+                self.info["playing"] = False
+
+        pass
+
+    @disnake.ui.button(label="Append Song",style=disnake.ButtonStyle.green)
+    async def songCallback(self,button:disnake.Button,inter:disnake.CmdInter):
+        modid = str(rnd.random())
+        await inter.response.send_modal(modal=MyModal(modid))
+        mod_inter:disnake.ModalInteraction = await self.bot.wait_for(
+            "modal_submit",
+            check= lambda i: i.custom_id == modid and i.author.id == inter.author.id,
+            timeout=300
+        )
+        # poll the songs and append to the list
+        # find a way to allow people to reorder the list
+        print(mod_inter.text_values.items())
+        pass
+
+    @disnake.ui.button(label="Leave",style=disnake.ButtonStyle.red)
+    async def leaveCallback(self,button:disnake.Button,inter:disnake.CmdInter):
+        await self.vc.disconnect()
+        button.disabled = True
+        await inter.response.send_message("left!",ephemeral=True)
+        await self.inter.delete_original_message(delay=5.0)
+        self.stop()
 
 class DevCog(commands.Cog):
 
@@ -91,31 +148,7 @@ class DevCog(commands.Cog):
         if not await self.bot.is_owner(inter.author):
             await inter.send("Oh, you're not Bucky")
             return
-        await inter.send(f"Pong!\n```{round(self.bot.latency)}```")
-
-    @commands.user_command()
-    async def avatar(self,inter:disnake.CmdInter, user:disnake.Member):
-        embed_dict = {
-        "title": "Embed Title",
-        "description": "Embed Description",
-        "color": 0xFEE75C,
-        "timestamp": datetime.now().isoformat(),
-        "author": {
-            "name": self.bot.user.name,
-            "url": "https://github.com/Stinky-c/",
-            "icon_url": "https://raw.githubusercontent.com/Stinky-c/Stinky-c/main/svg/it-just-works-somehow.png",
-        },
-        "thumbnail": {"url": self.bot.user.display_avatar.url},
-        "fields": [
-            {"name": "Name", "value": user.name, "inline": "false"},
-            {"name": "Inline Title", "value": "Inline Value", "inline": "false"},
-            {"name": "Account creation date", "value": disnake.utils.snowflake_time(user.id).strftime("%a %b %d at %I:%M:%S UTC"), "inline": "false"},
-        ],
-        "image": {"url": user.display_avatar.url},
-        "footer": {"icon_url": "https://raw.githubusercontent.com/Stinky-c/Stinky-c/main/svg/it-just-works-somehow.png"},
-        }
-
-        await inter.response.send_message(embed=disnake.Embed.from_dict(embed_dict))
+        await inter.send(f"Pong!\n```{round(self.bot.latency,5)}```")
 
 
     options = ["playing","listening","watching","custom","competing"]
@@ -130,6 +163,17 @@ class DevCog(commands.Cog):
         await self.bot.change_presence(activity=newact,)
         await inter.send(f"Presence set to `{type} {name}` ")
 
+    @dev.sub_command()
+    async def joinvc(self,inter:disnake.CmdInter,channel:disnake.VoiceChannel):
+        vc:disnake.VoiceClient = await channel.connect()
+        await inter.send("Connected!",view=VcView(
+            timeout=None,
+            vc=vc,
+            inter=inter,
+            bot=self.bot
+            )
+        )
+        pass
 
 
 

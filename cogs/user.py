@@ -1,6 +1,7 @@
 import disnake
 from disnake.ext import commands
 import logging
+from datetime import datetime
 from views import LinkView
 
 class UserCog(commands.Cog):
@@ -30,6 +31,30 @@ class UserCog(commands.Cog):
         }
         await inter.send(embed=disnake.Embed.from_dict(embed_dict),view=LinkView(link=("Track Link",spot.track_url)))
         self.loggerl2.info(f"{user.name} is listening to '{spot.title}' by '{spot.artists}' on spotify\nLink{spot.track_url}")
+
+    @commands.user_command()
+    async def avatar(self,inter:disnake.CmdInter, user:disnake.Member):
+        embed_dict = {
+        "title": "Embed Title",
+        "description": "Embed Description",
+        "color": 0xFEE75C,
+        "timestamp": datetime.now().isoformat(),
+        "author": {
+            "name": self.bot.user.name,
+            "url": "https://github.com/Stinky-c/",
+            "icon_url": "https://raw.githubusercontent.com/Stinky-c/Stinky-c/main/svg/it-just-works-somehow.png",
+        },
+        "thumbnail": {"url": self.bot.user.display_avatar.url},
+        "fields": [
+            {"name": "Name", "value": user.name, "inline": "false"},
+            {"name": "Inline Title", "value": "Inline Value", "inline": "false"},
+            {"name": "Account creation date", "value": disnake.utils.snowflake_time(user.id).strftime("%a %b %d at %I:%M:%S UTC"), "inline": "false"},
+        ],
+        "image": {"url": user.display_avatar.url},
+        "footer": {"icon_url": "https://raw.githubusercontent.com/Stinky-c/Stinky-c/main/svg/it-just-works-somehow.png"},
+        }
+
+        await inter.response.send_message(embed=disnake.Embed.from_dict(embed_dict))
 
 def setup(bot):
     logging.getLogger("disnakecommands.user").info(f"{__name__} is online") # init logger
