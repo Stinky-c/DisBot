@@ -8,7 +8,8 @@ A bot created using
 ## Docs
 
 - installing latest patch using pip
-    - `git+https://github.com/DisnakeDev/disnake#egg=disnake[speed,voice]`
+
+```pip install -U git+https://github.com/DisnakeDev/disnake#egg=disnake[speed,voice]```
 
 - [fixing pytube streams bug](https://stackoverflow.com/questions/68945080/pytube-exceptions-regexmatcherror-get-throttling-function-name-could-not-find/71903013#71903013)
 

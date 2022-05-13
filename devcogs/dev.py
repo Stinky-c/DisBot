@@ -39,7 +39,7 @@ class MyModal(disnake.ui.Modal):
             ),
         ]
         super().__init__(
-            title="Create Tag",
+            title="Append Song",
             custom_id=custom_id,
             components=components,
         )
@@ -53,20 +53,22 @@ class MyModal(disnake.ui.Modal):
 
 class VcView(disnake.ui.View):
     # add some verbose to this
-    def __init__(self, *, timeout:Optional[float]=180,vc:disnake.VoiceClient,inter:disnake.CmdInter,bot:commands.Bot):
+    def __init__(self, *, timeout:float=None,vc:disnake.VoiceClient,inter:disnake.CmdInter,bot:commands.Bot):
         super().__init__(timeout=timeout)
         self.vc = vc
         self.inter = inter
         self.bot = bot
-        self.info = {
-            "playing": False,
-            "songs":[
+        self.info:dict = {
+            "status": False,
+            "playing":False,
+            "queue":[
                 # list of songs
             ],
-            "channel": False
+            # "channel": False
         }
 
     def poll(self,inter:disnake.CmdInter,*args, **kwargs):
+        print(self.info)
         # updates the message list
         # use a dict and make a function to return it as a usable string
         pass
@@ -76,12 +78,14 @@ class VcView(disnake.ui.View):
         match status:
             case True:
                 self.vc.resume()
-                self.info["playing"] = True
+                self.info["status"] = True
+                await inter.send(f"{inter.author.name} has unpaused",delete_after=3.0)
+
             case False:
                 self.vc.pause()
-                self.info["playing"] = False
-
-        pass
+                self.info["status"] = False
+                await inter.send(f"{inter.author.name} has paused",delete_after=3.0)
+        self.poll(inter)
 
     @disnake.ui.button(label="Append Song",style=disnake.ButtonStyle.green)
     async def songCallback(self,button:disnake.Button,inter:disnake.CmdInter):
@@ -92,15 +96,16 @@ class VcView(disnake.ui.View):
             check= lambda i: i.custom_id == modid and i.author.id == inter.author.id,
             timeout=300
         )
+        self.info["queue"].append(mod_inter.text_values.get("link",None))
         # poll the songs and append to the list
         # find a way to allow people to reorder the list
-        print(mod_inter.text_values.items())
+        # or skip the current song
+        self.poll(inter)
         pass
 
     @disnake.ui.button(label="Leave",style=disnake.ButtonStyle.red)
     async def leaveCallback(self,button:disnake.Button,inter:disnake.CmdInter):
         await self.vc.disconnect()
-        button.disabled = True
         await inter.response.send_message("left!",ephemeral=True)
         await self.inter.delete_original_message(delay=5.0)
         self.stop()

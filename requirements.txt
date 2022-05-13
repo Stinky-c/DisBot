@@ -10,7 +10,7 @@ Brotli==1.0.9
 certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.12
-disnake @ git+https://github.com/DisnakeDev/disnake@6fe37c9a8351ac47eb5c9bdba428677051150233
+disnake @ git+https://github.com/DisnakeDev/disnake@bba4f03c87daf147740bc266d6060daafc502076
 frozenlist==1.3.0
 idna==3.3
 multidict==6.0.2
