@@ -4,3 +4,5 @@ venv/
 disnake.log
 disnakecommands.log
 prototypes/
+*ffmpeg*
+temp/**/

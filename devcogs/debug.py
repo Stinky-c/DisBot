@@ -41,7 +41,7 @@ class DebugCog(commands.Cog):
 
     @debug.sub_command(description="Echo Echo Echo - Bucky only")
     async def echo(self,inter:disnake.CmdInter,message:str):
-        if inter.author.id != int(os.environ["BUCKYID"]):
+        if self.bot.is_owner(inter.author):
             await inter.response.send_message("You cannot use this command",ephemeral=True)
             return
         pass
@@ -50,7 +50,7 @@ class DebugCog(commands.Cog):
 
     @debug.sub_command(description="Sends the server ip - Bucky only")
     async def sendipforserver(self,inter:disnake.CmdInter):
-        if inter.author.id == int(os.environ["BUCKYID"]):
+        if self.bot.is_owner(inter.author):
             await inter.response.send_message(req.get("https://icanhazip.com/").content.decode(),ephemeral=True)
             self.loggerl2.info(f"{inter.author.name}#{inter.author.discriminator} @ {datetime.now()} in {inter.guild} #{inter.channel}")
         else:

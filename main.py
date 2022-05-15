@@ -3,6 +3,7 @@ import disnake
 from disnake.ext import commands
 import anyconfig
 import random as rnd
+from definitions import *
 
 import logging
 from dotenv import load_dotenv
@@ -44,18 +45,23 @@ bot = commands.InteractionBot(
 async def on_ready():
     loggercmd.debug(f"'{bot.user.name}#{bot.user.discriminator}' is ready!")
 
-# @bot.event
-# async def on_slash_command_error(inter:disnake.CmdInter,error,*args, **kwargs):
-#     await inter.send("This command errored, Sorry")
-#     dm = bot.get_channel(logconf["erorrchannel"])
-#     await dm.send(error)
-#     loggercmd.error(f"a command errored in '{inter.guild}' '#{inter.channel}'\nargs: '{args}'kwargs: \n{kwargs}")
+
+if logconf["verboseenabled"]:
+    @bot.event
+    async def on_slash_command_error(inter:disnake.CmdInter,error,*args, **kwargs):
+        await inter.send("This command errored, Sorry")
+        chan = bot.get_channel(logconf["erorrchannel"])
+        await chan.send(error)
+        loggercmd.error(f"a command errored in '{inter.guild}' '#{inter.channel}'\nargs: '{args}'kwargs: \n{kwargs}")
 
 @bot.event
 async def on_message(message:disnake.Message):
-    if rnd.randint(chance["min"],chance["max"]) == 3:
+    if rnd.randint(chance["min"],chance["max"]) == 3 and tml["random"]["enabled"]:
         await message.add_reaction('🐄')
         loggercmd.info(f"'{message.id}' in '{message.channel}' rolled the dice and won\n'{message.jump_url}'")
+# I added it talan
+    if bot.user.mentioned_in(message):
+        await message.channel.send(rnd.choice(tml["quotes"]["closequotes"]))
 
 for cog in tml["cogs"]["devcogs"]:
     bot.load_extension(f"devcogs.{cog}",)
