@@ -4,6 +4,8 @@
 
 A bot created using Disnake with various togglable modules
 
+The github is a mirror of a local repo
+
 ----
 
 ## TODO

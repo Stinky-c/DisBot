@@ -9,7 +9,7 @@ ROOT_CONFIG = anyconfig.load("./config.toml")
 _ROOT_CONFIG_PATH = pathlib.Path(".\\config.toml")
 
 # paths
-FFMPEG_PATH = pathlib.Path(".\\ffmpeg-win64-lgpl\\bin\\ffmpeg.exe")
+FFMPEG_PATH = pathlib.Path(".\\ffmpeg-win64-lgpl\\bin\\ffmpeg.exe") if "music" not in ROOT_CONFIG["cogs"]["disabled"] else True
 TEMP_PATH = pathlib.Path(".\\temp")
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 

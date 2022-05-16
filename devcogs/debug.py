@@ -13,7 +13,6 @@ class DebugCog(commands.Cog):
         self.loggerl2 = logging.getLogger("disnakecommands.debug.cmd")
         self.bot = bot
 
-        
     @commands.slash_command()
     async def debug(self,inter:disnake.CmdInter):
         if not await self.bot.is_owner(inter.author):
@@ -29,7 +28,7 @@ class DebugCog(commands.Cog):
 
     @debug.sub_command(description="Stops the bot")
     async def stop(self,inter:disnake.CmdInter):
-        if inter.user.id == 593118233993805834:
+        if self.bot.is_owner(inter.author):
             await inter.response.send_message("Stopping")
             await self.bot.close()
         await inter.response.send_message("no lol")
