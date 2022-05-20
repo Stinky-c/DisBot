@@ -9,6 +9,7 @@ from pytube import YouTube
 import json
 import re
 import logging
+from nbt import nbt
 import shutil
 from definitions import *
 
@@ -33,6 +34,35 @@ class DevCog(commands.Cog):
     async def dev(self,inter:disnake.CmdInter):
         self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
         pass
+
+    @dev.sub_command()
+    async def nbt(self,inter:disnake.CmdInter,link:str):
+        if not link.startswith("https://cdn.discordapp.com/attachments/") or not link.endswith("/level.dat"):
+            await inter.send("Please send a valid link\nlink must start with `https://cdn.discordapp.com/attachments/` and end with `level.dat`")
+            return
+        await inter.response.defer()
+        self.loggerl2.info(f"Downloaded a 'level.dat'\n'{link}'")
+        async with self.aioclient.get(link) as res:
+            tmpp = os.path.join(TEMP_PATH,str(inter.id))
+            os.mkdir(tmpp)
+            nbtp = os.path.join(tmpp,"level.dat")
+            with open(nbtp,"wb+") as f:
+                f.write(await res.content.read())
+            # print(res.content)
+            try:
+                nbtfile = nbt.NBTFile(filename=nbtp)
+                # print(nbtfile.tags[2])
+                for tag in nbtfile["Data"].tags:
+                    if tag.name == "allowCommands":
+                        tag.value = 1
+                nbtfile.write_file(os.path.join(tmpp,"newnbtfile.nbt"))
+                await inter.send("I have enabled commands. Just drop this file in the place you found it and have fun",file=disnake.File(os.path.join(tmpp,"newnbtfile.nbt"),"level.dat"))
+            except Exception as e:
+                self.loggerl2.error(e)
+                await inter.send("The file was received but the edit failed")
+            finally:
+                shutil.rmtree(tmpp)
+
 
     @dev.sub_command()
     async def stop(self,inter:disnake.CmdInter):

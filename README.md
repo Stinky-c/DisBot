@@ -17,6 +17,11 @@ The github is a mirror of a local repo
 - [ ] Music player
     - skip function
     - continued play
+    - [saveify for downloading spotify songs to play?](https://github.com/LaurenceRawlings/savify)
+
+- [ ] rework youtube and reddit downloaders
+    - cahce files?
+    - download to temp folder
 
 ----
 
