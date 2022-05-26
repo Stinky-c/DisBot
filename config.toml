@@ -37,11 +37,12 @@
         path = "disnakecommands.log" # relative
         format="%(asctime)s:%(levelname)s:%(name)s: %(message)s"
 
-[random]
-    enabled=true
-    min = 1
-    max = 1000000000
-
+[fun]
+    [fun.random]
+        enabled=true
+        min = 1
+        max = 1000000000
+    [fun.chat]
 [quotes]
     closequotes = [
         "Cave Johnson here, Science isn't about why, it's about why not.",

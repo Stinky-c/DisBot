@@ -14,31 +14,28 @@ from definitions import ROOT_CONFIG
 
 path = f"{os.path.dirname(__file__)}/data/random/{rnd.choice(os.listdir(os.path.dirname(__file__)+'/data/random/'))}"
 with open(path) as f:
-    fuckjs:dict = json.load(f)
-    howfuck:list=[]
+    fuckjs: dict = json.load(f)
+    howfuck: list = []
 for fucking in fuckjs:
     howfuck.append(fucking["name"])
 
 
-
 class FunCog(commands.Cog):
-
-    def __init__(self, bot:commands.InteractionBot):
+    def __init__(self, bot: commands.InteractionBot):
         self.loggerl2 = logging.getLogger("disnakecommands.fun.cmd")
         self.bot = bot
         self.aioclient = aiohttp.ClientSession()
         self.quotes = ROOT_CONFIG["quotes"]["closequotes"]
 
     @commands.slash_command()
-    async def fun(self,inter:disnake.CmdInter):
-        self.loggerl2.info(f"'{inter.user.name}' ran a command") # sub command logger
+    async def fun(self, inter: disnake.CmdInter):
+        self.loggerl2.info(f"'{inter.user.name}' ran a command")  # sub command logger
 
         pass
 
-
-# cmd: would you rather
+    # cmd: would you rather
     @fun.sub_command(description="Would you rather game")
-    async def wouldyourather(self,inter:disnake.CmdInter):
+    async def wouldyourather(self, inter: disnake.CmdInter):
         """Would you rather
 
         Args:
@@ -47,26 +44,33 @@ class FunCog(commands.Cog):
         async with self.aioclient.get("https://api.aakhilv.me/fun/wyr") as res:
             await inter.send((await res.json())[0])
 
-# cmd: fuck
-# TODO rewrite this
+    # cmd: fuck
+    # TODO rewrite this
     @fun.sub_command(description="fuck")
-    async def fuck(self,inter:disnake.CmdInter ,to:disnake.User,method:str = commands.Param(choices=howfuck)):
+    async def fuck(
+        self,
+        inter: disnake.CmdInter,
+        to: disnake.User,
+        method: str = commands.Param(choices=howfuck),
+    ):
         """FOAAS - Fuck off as a service
 
         Args:
             to (disnake.User): Who?
-            method (str): How? 
+            method (str): How?
         """
         for i in fuckjs:
             if i["name"] == method:
-                link="https://foaas.com"+urllib.parse.quote(i["url"].format(name=to.name,from_=inter.user.name))
+                link = "https://foaas.com" + urllib.parse.quote(
+                    i["url"].format(name=to.name, from_=inter.user.name)
+                )
                 message = f"<@{to.id}>\n{link}"
                 await inter.response.send_message(message)
 
     # https://github.com/public-apis/public-apis#animals
-# cmd: dogsaas
+    # cmd: dogsaas
     @fun.sub_command(description="Dogs as a Service")
-    async def dogsaas(self,inter:disnake.CmdInter):
+    async def dogsaas(self, inter: disnake.CmdInter):
         """DOGAAS - Dogs as a service
         Powered by: `https://dog.ceo/dog-api/`
 
@@ -77,9 +81,9 @@ class FunCog(commands.Cog):
             await inter.send("here is a dog :)")
             await inter.channel.send((await res.json())["message"])
 
-# cmd: catsaas
+    # cmd: catsaas
     @fun.sub_command(description="Cats as a Service")
-    async def catsaas(self,inter:disnake.CmdInter):
+    async def catsaas(self, inter: disnake.CmdInter):
         """CATAAS - Cats as a service
         Powered by: `https://cataas.com/`
 
@@ -88,12 +92,14 @@ class FunCog(commands.Cog):
         """
         async with self.aioclient.get("https://cataas.com/cat") as res:
             await inter.send("here is a cat :)")
-            await inter.channel.send(file=disnake.File(io.BytesIO(await res.read()),"cat.jpg"))
+            await inter.channel.send(
+                file=disnake.File(io.BytesIO(await res.read()), "cat.jpg")
+            )
 
-# cmd: foxaas
+    # cmd: foxaas
     @fun.sub_command(description="Foxes as a Service")
-    async def foxaas(self,inter:disnake.CmdInter):
-        """FOXAAS - Foxes as a service 
+    async def foxaas(self, inter: disnake.CmdInter):
+        """FOXAAS - Foxes as a service
         Powered by:  `https://randomfox.ca`
 
         Args:
@@ -103,9 +109,9 @@ class FunCog(commands.Cog):
             await inter.send("here is a fox :)")
             await inter.channel.send((await res.json())["image"])
 
-# cmd: duckaas
+    # cmd: duckaas
     @fun.sub_command(description="Ducks as a Service")
-    async def duckaas(self,inter:disnake.CmdInter):
+    async def duckaas(self, inter: disnake.CmdInter):
         """DUCKAAS - Ducks as a service
         Powered by: `https://random-d.uk`
 
@@ -116,9 +122,9 @@ class FunCog(commands.Cog):
             await inter.send("here is a duck :)")
             await inter.channel.send((await res.json())["url"])
 
-# cmd: axolotlaas
+    # cmd: axolotlaas
     @fun.sub_command(description="Axolotl as a Service")
-    async def axolotlaas(self,inter:disnake.CmdInter):
+    async def axolotlaas(self, inter: disnake.CmdInter):
         """AXOLOTLASS - Axolotls as a service
         api is being reworked 5/5
         https://github.com/AxolotlAPI/what-happened
@@ -126,26 +132,29 @@ class FunCog(commands.Cog):
         Args:
             None
         """
-        await inter.send("This is currently being reworked D:\nhttps://github.com/AxolotlAPI/what-happened"); return
+        await inter.send(
+            "This is currently being reworked D:\nhttps://github.com/AxolotlAPI/what-happened"
+        )
+        return
         async with self.aioclient.get("https://axoltlapi.herokuapp.com/") as res:
             await inter.send("here is a axolotl :)")
             await inter.channel.send((await res.json())["url"])
 
-# cmd: catboy
+    # cmd: catboy
     @fun.sub_command(description="Returns a catboy")
-    async def catboy(self,inter:disnake.CmdInter):
+    async def catboy(self, inter: disnake.CmdInter):
         """Catboy - Returns a catboy image
         Powered by: `https://api.catboys.com/`
-        
+
         Args:
             None
         """
         async with self.aioclient.get("https://api.catboys.com/img") as res:
             await inter.send((await res.json())["url"])
 
-# cmd: animequotes
+    # cmd: animequotes
     @fun.sub_command(description="Anime quotes")
-    async def animequotes(self,inter:disnake.CmdInter):
+    async def animequotes(self, inter: disnake.CmdInter):
         """Anime Quotes - Returns an anime quote
         Powered by: `https://animechan.vercel.app`
 
@@ -153,11 +162,13 @@ class FunCog(commands.Cog):
             None
         """
         async with self.aioclient.get("https://animechan.vercel.app/api/random") as res:
-            await inter.send(f"{(await res.json())['character']}: {(await res.json())['quote']}\n- {(await res.json())['anime']}")
+            await inter.send(
+                f"{(await res.json())['character']}: {(await res.json())['quote']}\n- {(await res.json())['anime']}"
+            )
 
-# cmd: cat link
+    # cmd: cat link
     @fun.sub_command(description="Cat as a Service; link")
-    async def catlink(self,inter:disnake.CmdInter):
+    async def catlink(self, inter: disnake.CmdInter):
         """CATAAS: link - Cats as a service: link
         Powered by: `https://cataas.com`
 
@@ -167,9 +178,9 @@ class FunCog(commands.Cog):
         async with self.aioclient.get("https://cataas.com/cat?json=true") as res:
             await inter.send(f"https://cataas.com{(await res.json())['url']}")
 
-#cmd: fun fact
+    # cmd: fun fact
     @fun.sub_command(description="fun facts!")
-    async def funfact(self,inter:disnake.CmdInter):
+    async def funfact(self, inter: disnake.CmdInter):
         """Fun Facts! - returns a fun fact
 
         Args:
@@ -178,22 +189,30 @@ class FunCog(commands.Cog):
         async with self.aioclient.get("https://api.aakhilv.me/fun/facts") as res:
             await inter.send((await res.json())[0])
 
-# cmd: randomapi
-    @fun.sub_command(description="Returns a singular random public api powered by https://api.publicapis.org")
-    async def randomapi(self,inter:disnake.CmdInter):
+    # cmd: randomapi
+    @fun.sub_command(
+        description="Returns a singular random public api powered by https://api.publicapis.org"
+    )
+    async def randomapi(self, inter: disnake.CmdInter):
         """Random API - Returns a random public API
 
         Args:
             None
         """
         async with self.aioclient.get("https://api.publicapis.org/random") as res:
-            js = (await res.json()) ["entries"][0]
-            await inter.send(f"```Name: {js['API']}\nDescription: {js['Description']}\nAuth: {js['Auth']}\nCORS: {js['Cors']}\nLink: {js['Link']}\n```",view=LinkView(("Home Page",js["Link"])))
+            js = (await res.json())["entries"][0]
+            await inter.send(
+                f"```Name: {js['API']}\nDescription: {js['Description']}\nAuth: {js['Auth']}\nCORS: {js['Cors']}\nLink: {js['Link']}\n```",
+                view=LinkView(("Home Page", js["Link"])),
+            )
 
-
-# cmd: RPS
+    # cmd: RPS
     @fun.sub_command(description="RPS")
-    async def rps(self,inter:disnake.CmdInter,choice:str=commands.Param(choices=["rock","paper","scissors"])):
+    async def rps(
+        self,
+        inter: disnake.CmdInter,
+        choice: str = commands.Param(choices=["rock", "paper", "scissors"]),
+    ):
         """RPS - Plays rock paper scissors
 
         Args:
@@ -203,11 +222,16 @@ class FunCog(commands.Cog):
         # :roll_of_paper: 🧻
         # :scissors: ✂️
         await inter.response.send_message(f"You {rnd.choice(['won','lost','tied'])}!")
+
     @fun.sub_command()
-    async def quote(self,inter:disnake.CmdInter,amount:int=commands.Param(0,lt=15,gt=0)):
-        await inter.send("\n".join(rnd.choices(self.quotes,k=amount)))
+    async def quote(
+        self, inter: disnake.CmdInter, amount: int = commands.Param(0, lt=15, gt=0)
+    ):
+        await inter.send("\n".join(rnd.choices(self.quotes, k=amount)))
 
 
-def setup(bot): 
-    logging.getLogger("disnakecommands.fun").info(f"{__name__} is online") # init logger
-    bot.add_cog(FunCog(bot),override=True) 
+def setup(bot):
+    logging.getLogger("disnakecommands.fun").info(
+        f"{__name__} is online"
+    )  # init logger
+    bot.add_cog(FunCog(bot), override=True)
