@@ -5,6 +5,7 @@ import io
 import aiohttp
 from views import LinkView
 import random as rnd
+import string
 import os
 import json
 import urllib
@@ -32,6 +33,43 @@ class FunCog(commands.Cog):
         self.loggerl2.info(f"'{inter.user.name}' ran a command")  # sub command logger
 
         pass
+
+    strchoices = [
+        "ascii_letters",
+        "ascii_lowercase",
+        "ascii_uppercase",
+        "digits",
+        "hexdigits",
+        "octdigits",
+        "printable",
+        "punctuation",
+    ]
+
+    @fun.sub_command()
+    async def spam(
+        self,
+        inter: disnake.CmdInter,
+        length: int = commands.Param(gt=0, lt=2000),
+        typeoption: str = commands.Param(choices=strchoices, default="printable"),
+    ):
+        match typeoption:
+            case "ascii_letters",:
+                spam = "".join(rnd.choices(string.ascii_letters, k=length))
+            case "ascii_lowercase",:
+                spam = "".join(rnd.choices(string.ascii_lowercase, k=length))
+            case "ascii_uppercase",:
+                spam = "".join(rnd.choices(string.ascii_uppercase, k=length))
+            case "digits",:
+                spam = "".join(rnd.choices(string.digits, k=length))
+            case "hexdigits",:
+                spam = "".join(rnd.choices(string.hexdigits, k=length))
+            case "octdigits",:
+                spam = "".join(rnd.choices(string.octdigits, k=length))
+            case "printable",:
+                spam = "".join(rnd.choices(string.printable, k=length))
+            case "punctuation",:
+                spam = "".join(rnd.choices(string.punctuation, k=length))
+        await inter.send(spam)
 
     # cmd: would you rather
     @fun.sub_command(description="Would you rather game")
