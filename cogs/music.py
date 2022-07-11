@@ -1,7 +1,7 @@
 import disnake
 from disnake.ext import commands
 import logging
-from views import VcView
+from views.music import VcView
 
 
 class MusicPlayerCog(commands.Cog):

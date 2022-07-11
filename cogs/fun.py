@@ -3,7 +3,7 @@ import disnake
 from disnake.ext import commands
 import io
 import aiohttp
-from views import LinkView
+from views.music import LinkView
 import random as rnd
 import string
 import os

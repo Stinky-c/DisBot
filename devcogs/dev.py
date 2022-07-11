@@ -72,13 +72,15 @@ class DevCog(commands.Cog):
             finally:
                 shutil.rmtree(tmpp)
 
-    @dev.sub_command()
+    @dev.sub_command(description="Stops the bot gracefully")
     async def stop(self, inter: disnake.CmdInter):
         if not await self.bot.is_owner(inter.author):
             await inter.send("You cant run this command.")
             return
         try:
             await inter.send(rnd.choice(self.closequotes))
+            self.bot.clear()
+            await asyncio.sleep(5)
             await self.bot.close()
         except Exception:
             pass
@@ -119,18 +121,6 @@ class DevCog(commands.Cog):
             activity=newact,
         )
         await inter.send(f"Presence set to `{type} {name}` ")
-
-    # @dev.sub_command()
-    # async def testembed(self,inter:disnake.CmdInter):
-    #     embed_dict = {
-    #         "title": "Music Player",
-    #         "color": disnake.Color.random().value, #done
-    #         "timestamp": datetime.now().isoformat(),
-    #         "fields": [
-    #             {"name": "Link", "value": "link", "inline": "false"},
-    #         ],
-    #     }
-    #     await inter.send(embed=disnake.Embed.from_dict(embed_dict))
 
     """
 

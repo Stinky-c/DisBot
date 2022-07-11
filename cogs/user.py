@@ -2,7 +2,7 @@ import disnake
 from disnake.ext import commands
 import logging
 from datetime import datetime
-from views import LinkView
+from views.music import LinkView
 
 
 class UserCog(commands.Cog):

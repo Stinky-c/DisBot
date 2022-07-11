@@ -6,6 +6,7 @@ import logging
 class RenameMeCog(commands.Cog):
     def __init__(self, bot: commands.InteractionBot):
         self.bot = bot
+        self.loggerl2 = logging.getLogger("disnakecommands.TTS.cmd")
 
     @commands.slash_command()
     async def RenameMe(self, inter):

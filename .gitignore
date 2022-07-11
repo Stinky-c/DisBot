@@ -1,5 +1,6 @@
 __pycache__/
 venv/
+vnev
 .env
 disnake.log
 disnakecommands.log

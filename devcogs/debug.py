@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime
 import disnake
 from disnake.ext import commands
@@ -20,25 +21,6 @@ class DebugCog(commands.Cog):
             return
         self.loggerl2.info(f"'{inter.user.name}' ran a command")  # sub command logger
         pass
-
-    @debug.sub_command(description="test")
-    async def test(self, inter: disnake.CmdInter):
-        await inter.response.send_message(inter)
-        async for guild in self.bot.fetch_guilds(limit=150):
-            print(guild.name)
-            inter
-
-    @debug.sub_command(description="Stops the bot")
-    async def stop(self, inter: disnake.CmdInter):
-        if self.bot.is_owner(inter.author):
-            await inter.response.send_message("Stopping")
-            await self.bot.close()
-        await inter.response.send_message("no lol")
-
-    @debug.sub_command()
-    async def parrot(self, inter: disnake.CmdInter, message: str):
-        await inter.response.send_message(message)
-        print(message)
 
     @debug.sub_command(description="Echo Echo Echo - Bucky only")
     async def echo(self, inter: disnake.CmdInter, message: str):
